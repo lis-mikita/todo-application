@@ -5,8 +5,4 @@
     <RootNamespace>todo_domain_entities</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\" />
-  </ItemGroup>
-
 </Project>

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace todo_domain_entities.Entities
 {
-    internal class TodoList
+    public class TodoList
     {
         [Required, Key]
         public int Id { get; set; }
@@ -17,6 +18,8 @@ namespace todo_domain_entities.Entities
 
         [MaxLength(500)]
         public int Description { get; set; }
+
+        public List<TodoItem> TodoItems { get; set; } 
 
     }
 }

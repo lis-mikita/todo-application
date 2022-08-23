@@ -7,7 +7,7 @@ using System.Text;
 
 namespace todo_domain_entities.Entities
 {
-    internal class TodoItem
+    public class TodoItem
     {
         [Required, Key]
         public int Id { get; set; }
@@ -35,9 +35,6 @@ namespace todo_domain_entities.Entities
             set => CreatedDate = DateTime.SpecifyKind(value, DateTimeKind.Utc);
         }
 
-        //public DateTime UpdatedDate { get; set; }
-
-
         [DataType(DataType.DateTime)]
         [Column("DueTo")]
         public DateTime DuetoDateTime 
@@ -47,7 +44,7 @@ namespace todo_domain_entities.Entities
         }
     }
 
-    enum TodoItemStatus
+    public enum TodoItemStatus
     {
         Completed,
         InProgress,

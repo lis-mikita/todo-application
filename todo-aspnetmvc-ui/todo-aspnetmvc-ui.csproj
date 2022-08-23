@@ -5,4 +5,14 @@
     <RootNamespace>todo_aspnetmvc_ui</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Contexts\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\todo-domain-entities\todo-domain-entities.csproj" />
+  </ItemGroup>
+
 </Project>

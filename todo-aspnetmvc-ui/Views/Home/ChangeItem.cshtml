@@ -1,0 +1,27 @@
+﻿@page
+
+
+<h2>Change your todo item in list:</h2>
+<form method="post">
+    <p>
+        <label>Title:</label><br />
+        <input type="text" name="title" value="@ViewBag.TodoItem.Title" />
+    </p>
+    <p>
+        <label>Description:</label><br />
+        <input type="text" name="description" value="@ViewBag.TodoItem.Description" />
+    </p>
+    <p>
+        <label>Due date:</label><br />
+        <input type="datetime" name="datetime" value="@ViewBag.TodoItem.DuetoDateTime" />
+    </p>
+    <p>
+        @using todo_aspnetmvc_ui.Models
+        <select name="status" value="@ViewBag.TodoItem.Status" >
+            <option value="@TodoItemStatus.Completed">Completed</option>
+            <option value="@TodoItemStatus.InProgress">In progress</option>
+            <option value="@TodoItemStatus.NotStarted">Not started</option>
+        </select>
+    </p>
+    <input type="submit" value="Send" />
+</form>

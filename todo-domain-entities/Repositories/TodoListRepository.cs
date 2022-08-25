@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using todo_domain_entities.EF;
 using todo_domain_entities.Entities;
@@ -33,6 +35,10 @@ namespace todo_domain_entities.Repositories
 
         public void Update(TodoList item)
         {
+            var existingList = _context.TodoLists.Local.SingleOrDefault(l => l.Id == item.Id);
+            if (existingList != null)
+                _context.Entry(existingList).State = EntityState.Detached;
+
             _context.TodoLists.Update(item);
         }
 

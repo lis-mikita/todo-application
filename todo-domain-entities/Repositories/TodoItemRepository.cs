@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using todo_domain_entities.EF;
 using todo_domain_entities.Entities;
@@ -33,7 +35,12 @@ namespace todo_domain_entities.Repositories
 
         public void Update(TodoItem item)
         {
+            var existingItem = _context.TodoItems.Local.SingleOrDefault(i => i.Id == item.Id);
+            if (existingItem != null)
+                _context.Entry(existingItem).State = EntityState.Detached;
+
             _context.TodoItems.Update(item);
+            //TODO:
         }
 
         public void Delete(int id)

@@ -51,28 +51,30 @@ namespace todo_domain_entities
             DB.Save();
         }
 
+        public TodoListBL FindTodoList(int id)
+        {
+            return MapperList.Map<TodoListBL>(DB.TodoLists.Read(id));
+        }
+
+        public TodoItemBL FindTodoItem(int id)
+        {
+            return MapperItem.Map<TodoItemBL>(DB.TodoItems.Read(id));
+        }
+
         public void UpdateTodoList(TodoListBL element)
         {
-            TodoList toUpdate = DB.TodoLists.Read(element.Id);
-
-            if (toUpdate != null)
-            {
-                toUpdate = MapperList.Map<TodoList>(element);
-                DB.TodoLists.Update(toUpdate);
-                DB.Save();
-            }
+             TodoList toUpdate = MapperList.Map<TodoList>(element);
+             DB.TodoLists.Update(toUpdate);
+             DB.Save();
+             //TODO: ADD check
         }
 
         public void UpdateTodoItem(TodoItemBL element)
         {
-            TodoItem toUpdate = DB.TodoItems.Read(element.Id);
-
-            if (toUpdate != null)
-            {
-                toUpdate = MapperItem.Map<TodoItem>(element);
-                DB.TodoItems.Update(toUpdate);
-                DB.Save();
-            }
+            TodoItem toUpdate = MapperItem.Map<TodoItem>(element);
+            DB.TodoItems.Update(toUpdate);
+            DB.Save();
+            //TODO: ADD check
         }
 
         public IEnumerable<TodoListBL> GetTodoLists()

@@ -26,12 +26,6 @@ namespace todo_aspnetmvc_ui
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddControllersWithViews();
-
-            services.AddDbContext<TodoDBContext>(opts => {
-                opts.UseSqlServer(
-                    Configuration["ConnectionStrings:TodoConnection"]);
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

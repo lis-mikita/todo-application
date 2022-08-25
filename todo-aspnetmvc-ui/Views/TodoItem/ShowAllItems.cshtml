@@ -1,0 +1,13 @@
+﻿@using todo_domain_entities.EntitiesBL
+@model IEnumerable<TodoItemBL>
+
+<h2>All lists:</h2>
+
+
+@foreach (TodoItemBL item in Model)
+{
+    <h3>@item.ToDoListId :</h3>
+    <ul>
+        <li>@item.Title - @item.Description - @item.CreatedDate - @item.DuetoDateTime - @item.Status</li>
+    </ul>
+}

@@ -1,23 +1,22 @@
-﻿@page
+﻿@model todo_domain_entities.EntitiesBL.TodoItemBL
 
-
-<h2>Change your todo item in list:</h2>
+<h2>@TempData["Title"]</h2>
 <form method="post">
     <p>
         <label>Title:</label><br />
-        <input type="text" name="title" value="@ViewBag.TodoItem.Title" />
+        <input type="text" name="title" value="@Model.Title" />
     </p>
     <p>
         <label>Description:</label><br />
-        <input type="text" name="description" value="@ViewBag.TodoItem.Description" />
+        <input type="text" name="description" value="@Model.Description" />
     </p>
     <p>
         <label>Due date:</label><br />
-        <input type="datetime" name="datetime" value="@ViewBag.TodoItem.DuetoDateTime" />
+        <input type="datetime" name="datetime" value="@Model.DuetoDateTime" />
     </p>
     <p>
         @using todo_aspnetmvc_ui.Models
-        <select name="status" value="@ViewBag.TodoItem.Status" >
+        <select name="status" value="@Model.Status" >
             <option value="@TodoItemStatus.Completed">Completed</option>
             <option value="@TodoItemStatus.InProgress">In progress</option>
             <option value="@TodoItemStatus.NotStarted">Not started</option>

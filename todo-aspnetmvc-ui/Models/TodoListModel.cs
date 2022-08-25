@@ -1,22 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using todo_domain_entities.Entities;
+using todo_domain_entities.EntitiesBL;
 
 namespace todo_aspnetmvc_ui.Models
 {
     public class TodoListModel
     {
-        [Required, Key]
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        [MinLength(3)]
         public string Title { get; set; }
 
-        [MaxLength(500)]
         public string Description { get; set; }
 
-        public List<TodoItem> TodoItems { get; set; }
+        public List<TodoItemModel> TodoItems { get; set; }
+
+        public TodoListModel()
+        {
+            TodoItems = new List<TodoItemModel>();
+        }
     }
 }

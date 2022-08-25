@@ -9,12 +9,11 @@ namespace todo_domain_entities.Entities
 {
     public class TodoItem
     {
+        private DateTime _createdDate;
+        private DateTime _duetoDate;
+
         [Required, Key]
         public int Id { get; set; }
-
-        [Required]
-        [MaxLength(500)]
-        public string TodoListId { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -26,22 +25,26 @@ namespace todo_domain_entities.Entities
 
         public TodoItemStatus Status { get; set; }
 
-        [Obsolete("Property only used for EF-serialization purposes")]
+
         [DataType(DataType.DateTime)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public DateTime CreatedDate 
         {
-            get => CreatedDate.ToUniversalTime();
-            set => CreatedDate = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+            get => _createdDate.ToUniversalTime();
+            set => _createdDate = DateTime.SpecifyKind(value, DateTimeKind.Utc);
         }
 
         [DataType(DataType.DateTime)]
         [Column("DueTo")]
         public DateTime DuetoDateTime 
         {
-            get => DuetoDateTime.ToUniversalTime();
-            set => DuetoDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+            get => _duetoDate.ToUniversalTime();
+            set => _duetoDate = DateTime.SpecifyKind(value, DateTimeKind.Utc);
         }
+
+        public int? ToDoListId { get; set; }
+
+        public TodoList todoList { get; set; }
     }
 
     public enum TodoItemStatus

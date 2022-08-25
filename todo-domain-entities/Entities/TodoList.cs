@@ -17,9 +17,14 @@ namespace todo_domain_entities.Entities
         public string Title { get; set; }
 
         [MaxLength(500)]
-        public int Description { get; set; }
+        public string Description { get; set; }
 
-        public List<TodoItem> TodoItems { get; set; } 
+        public List<TodoItem> TodoItems { get; set; }
+
+        public TodoList()
+        {
+            TodoItems = new List<TodoItem>();
+        }
 
     }
 }

@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    form {
+        width: 250px;
+        padding: 20px;
+        outline: 2px solid #000;
+    }
+</style>
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <h2>Choose action under view</h2>
+    <div>
+        <form method="get" style="text-align:center">
+            <button type="submit" asp-controller="TodoList" asp-action="AddList">Add new list</button>
+        </form>
+        <form method="get" style="text-align:center">
+            <p>
+                <label>Number of item</label>
+                <input type="number" name="list_id" /><br />
+            </p>
+            <button type="submit" asp-controller="TodoItem" asp-action="AddItem">Add new item</button>
+        </form>
+        <form method="get" style="text-align:center">
+            <p>
+                <label>Number of list</label>
+                <input type="number" name="list_id" /><br />
+            </p>
+            <button type="submit" asp-controller="TodoList" asp-action="ChangeList">Change list</button>
+        </form>
+        <form method="get" style="text-align:center">
+            <p>
+                <label>Number of list</label>
+                <input type="number" name="list_id" /><br />
+            </p>
+            <p>
+                <label>Number of item</label>
+                <input type="number" name="item_id" /><br />
+            </p>
+            <button type="submit" asp-controller="TodoItem" asp-action="ChangeItem">Change item</button>
+        </form>
+        <form method="get" style="text-align:center">
+            <button type="submit" asp-controller="TodoList" asp-action="ShowAllLists" >Show all lists</button>
+        </form>
+        <form method="get" style="text-align:center">
+            <button type="submit" asp-controller="TodoItem" asp-action="ShowAllItems">Show all items</button>
+        </form>
+    </div>
+</div>

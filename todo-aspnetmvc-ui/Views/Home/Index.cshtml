@@ -1,51 +1,336 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
-<style>
-    form {
-        width: 250px;
-        padding: 20px;
-        outline: 2px solid #000;
-    }
-</style>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <h2>Choose action under view</h2>
-    <div>
-        <form method="get" style="text-align:center">
-            <button type="submit" asp-controller="TodoList" asp-action="AddList">Add new list</button>
-        </form>
-        <form method="get" style="text-align:center">
-            <p>
-                <label>Number of item</label>
-                <input type="number" name="list_id" /><br />
-            </p>
-            <button type="submit" asp-controller="TodoItem" asp-action="AddItem">Add new item</button>
-        </form>
-        <form method="get" style="text-align:center">
-            <p>
-                <label>Number of list</label>
-                <input type="number" name="list_id" /><br />
-            </p>
-            <button type="submit" asp-controller="TodoList" asp-action="ChangeList">Change list</button>
-        </form>
-        <form method="get" style="text-align:center">
-            <p>
-                <label>Number of list</label>
-                <input type="number" name="list_id" /><br />
-            </p>
-            <p>
-                <label>Number of item</label>
-                <input type="number" name="item_id" /><br />
-            </p>
-            <button type="submit" asp-controller="TodoItem" asp-action="ChangeItem">Change item</button>
-        </form>
-        <form method="get" style="text-align:center">
-            <button type="submit" asp-controller="TodoList" asp-action="ShowAllLists" >Show all lists</button>
-        </form>
-        <form method="get" style="text-align:center">
-            <button type="submit" asp-controller="TodoItem" asp-action="ShowAllItems">Show all items</button>
-        </form>
+<!--Header-->
+<nav class="navbar navbar-light bg-light header">
+    <div class="container-fluid">
+        <div class="links">
+            <a class="navbar-brand links" href="#">TODOCKER</a>
+        </div>
+        <div class="control">
+            <div class="custom-control custom-switch">
+                <label class="custom-control-label" for="customSwitch1">Light Mode</label>
+                <input checked="" type="checkbox" class="custom-control-input" id="customSwitch1">
+            </div>
+            <div class="bell">
+                <span class="material-symbols-outlined">
+                    notifications
+                </span>
+            </div>
+            <div class="user">
+                <img class="user" src="~/Media/beared-guy02-min.jpg" />
+                <div class="info">
+                    <p class="name">Mikita Lis</p>
+                    <p class="title">.Net Developer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!--Side menu-->
+<div class="side-menu">
+    <div class="workspace-side-menu">
+        <div class="title-workspace-side-menu">
+            <div class="header-title-workspace-side-menu">
+                <a href="/">
+                    <span class="header-title-workspace-side-menu">My Workspace</span>
+                </a>
+            </div>
+            <div class="three-dots-title-workspace-side-menu">
+                <span class="material-symbols-outlined three-dots-title-workspace-side-menu">
+                    more_horiz
+                </span>
+            </div>
+        </div>
+        <div class="menu-workspace-side-menu">
+            <div class="help-menu-workspace-side-menu">
+                <div class="title-help-menu-workspace-side-menu">
+                    <a href="#" class="title-help-menu-workspace-side-menu">
+                        To-do lists
+                    </a>
+                </div>
+                <div class="three-dotz-help-menu-workspace-side-menu">
+                    <span class="material-symbols-outlined three-dotz-help-menu-workspace-side-menu">
+                        more_horiz
+                    </span>
+                </div>
+            </div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="spreadsheets">
+                    <div class="messages-spreadsheets">
+                        <div class="item-messages-spreadsheets">
+                            <div class="status-item-messages-spreadsheets">
+                                <div class="eye-status-item-messages-spreadsheets">
+                                    <span class="material-symbols-outlined eye-status-item-messages-spreadsheets">
+                                        visibility
+                                    </span>
+                                </div>
+                                <a href="#" class="nav-link link-dark status-item-messages-spreadsheets">
+                                    Get started
+                                </a>
+                            </div>
+                            <div class="three-dotz-item-messages-spreadsheets">
+                                <span class="material-symbols-outlined three-dotz-item-messages-spreadsheets">
+                                    more_horiz
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="spreadsheets">
+                    <div class="messages-spreadsheets">
+                        <div class="item-messages-spreadsheets">
+                            <div class="status-item-messages-spreadsheets">
+                                <div class="eye-status-item-messages-spreadsheets">
+                                    <span class="material-symbols-outlined eye-status-item-messages-spreadsheets">
+                                        visibility
+                                    </span>
+                                </div>
+                                <a href="#" class="nav-link link-dark status-item-messages-spreadsheets">
+                                    Home
+                                </a>
+                            </div>
+                            <div class="three-dotz-item-messages-spreadsheets">
+                                <span class="material-symbols-outlined three-dotz-item-messages-spreadsheets">
+                                    more_horiz
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="spreadsheets">
+                    <div class="messages-spreadsheets">
+                        <div class="item-messages-spreadsheets">
+                            <div class="status-item-messages-spreadsheets">
+                                <div class="eye-status-item-messages-spreadsheets">
+                                    <span class="material-symbols-outlined eye-status-item-messages-spreadsheets">
+                                        visibility
+                                    </span>
+                                </div>
+                                <a href="#" class="nav-link link-dark status-item-messages-spreadsheets">
+                                    .Net course
+                                </a>
+                            </div>
+                            <div class="three-dotz-item-messages-spreadsheets">
+                                <span class="material-symbols-outlined three-dotz-item-messages-spreadsheets">
+                                    more_horiz
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="create">
+                <div class="spreadsheets-create">
+                    <div class="messages-spreadsheets-create">
+                        <div class="item-messages-spreadsheets">
+                            <!--button type="button" style="border: 0px; color:#FFF; padding: 0px 0px; width: 181px; height: 18px;"-->
+                            <div class="title-item-messages-spreadsheets-create">
+                                <span class="title-item-messages-spreadsheets-create">
+                                    Create new
+                                </span>
+                            </div>
+                            <div class="plus-circle-item-messages-spreadsheets-create">
+                                <span class="material-symbols-outlined plus-circle-item-messages-spreadsheets-create">
+                                    add_circle
+                                </span>
+                            </div>
+                            </!--button-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Main image-->
+<div class="img-main">
+    <figure>
+        <img src="Media/rectangle-main.jpg" />
+    </figure>
+</div>
+
+<!--Main page-->
+<div class="main">
+    <div class="header-main">
+        <h1 class="title-header-main">Home</h1>
+        <h3 class="description-header-main">Description description of your to-do list</h3>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+        </div>
+    </div>
+    <div class="table-main">
+        <div class="settings-table-main">
+            <div style="padding-top: 5px;">
+                <button class="btn item-buttons-settings-table-main" type="button" id="" style="display: flex; ">
+                    <div style="padding-right: 5px; padding-top: 1px;">
+                        <span class="material-symbols-outlined " style="font-size: 19px;">
+                            add_circle
+                        </span>
+                    </div>
+                    Create new
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-secondary dropdown-toggle item-buttons-settings-table-main" type="button" id="" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort By:
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-secondary dropdown-toggle item-buttons-settings-table-main" type="button" id="" data-bs-toggle="dropdown" aria-expanded="false">
+                    Group By:
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-secondary dropdown-toggle item-buttons-settings-table-main" type="button" id="" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter By:
+                </button>
+            </div>
+        </div>
+        <table class="table border-top border-bottom" id="table">
+            <thead>
+                <tr>
+                    <th scope="col" id="col-numer"></th>
+                    <th scope="col" id="col-done">Done</th>
+                    <th scope="col" id="col-title">Title</th>
+                    <th scope="col" id="col-description">Description</th>
+                    <th scope="col" id="col-due-date">Due Date</th>
+                    <th scope="col" id="col-create-date">Creation Date</th>
+                    <th scope="col" id="col-status">Status</th>
+                    <th scope="col" id="col-dotz"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="col-numer" scope="row">1</td>
+                    <td id="col-done">
+                        <div class="form-check checkbox-table-main">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        </div>
+                    </td>
+                    <td id="col-title">Title</td>
+                    <td id="col-description">Description</td>
+                    <td id="col-due-date">31 Aug 2022</td>
+                    <td id="col-create-date">28 Aug 2022</td>
+                    <td id="col-status">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Not started
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#">Not Started</a></li>
+                                <li><a class="dropdown-item" href="#">In Progress</a></li>
+                                <li><a class="dropdown-item" href="#">Completed</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td id="col-dotz">
+                        <span class="material-symbols-outlined">
+                            more_horiz
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="col-numer" scope="row">2</td>
+                    <td id="col-done">
+                        <div class="form-check checkbox-table-main">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        </div>
+                    </td>
+                    <td id="col-title">Title</td>
+                    <td id="col-description">Description</td>
+                    <td id="col-due-date">31 Aug 2022</td>
+                    <td id="col-create-date">28 Aug 2022</td>
+                    <td id="col-status">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Not started
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#">Not Started</a></li>
+                                <li><a class="dropdown-item" href="#">In Progress</a></li>
+                                <li><a class="dropdown-item" href="#">Completed</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td id="col-dotz">
+                        <span class="material-symbols-outlined">
+                            more_horiz
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="col-numer" scope="row">3</td>
+                    <td id="col-done">
+                        <div class="form-check checkbox-table-main">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        </div>
+                    </td>
+                    <td id="col-title">Title</td>
+                    <td id="col-description">Description</td>
+                    <td id="col-due-date">31 Aug 2022</td>
+                    <td id="col-create-date">28 Aug 2022</td>
+                    <td id="col-status">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Not started
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#">Not Started</a></li>
+                                <li><a class="dropdown-item" href="#">In Progress</a></li>
+                                <li><a class="dropdown-item" href="#">Completed</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td id="col-dotz">
+                        <span class="material-symbols-outlined">
+                            more_horiz
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="col-numer" scope="row">4</td>
+                    <td id="col-done">
+                        <div class="form-check checkbox-table-main">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        </div>
+                    </td>
+                    <td id="col-title">Title</td>
+                    <td id="col-description">Description</td>
+                    <td id="col-due-date">31 Aug 2022</td>
+                    <td id="col-create-date">28 Aug 2022</td>
+                    <td id="col-status">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Not started
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#">Not Started</a></li>
+                                <li><a class="dropdown-item" href="#">In Progress</a></li>
+                                <li><a class="dropdown-item" href="#">Completed</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td id="col-dotz">
+                        <span class="material-symbols-outlined">
+                            more_horiz
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="create-table-main">
+            <div >
+                <button class="btn item-buttons-settings-table-main" type="button" id="" style="display: flex; ">
+                    <div style="padding-right: 5px; padding-top: 1px;">
+                        <span class="material-symbols-outlined " style="font-size: 19px;">
+                            add_circle
+                        </span>
+                    </div>
+                    Create new
+                </button>
+            </div>
+        </div>
     </div>
 </div>

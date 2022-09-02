@@ -13,6 +13,6 @@ namespace todo_aspnetmvc_ui.Models
 
         public string Description { get; set; }
 
-
+        public bool IsHidden { get; set; }
     }
 }

@@ -19,12 +19,7 @@ namespace todo_domain_entities.Entities
         [MaxLength(500)]
         public string Description { get; set; }
 
-        public List<TodoItem> TodoItems { get; set; }
-
-        public TodoList()
-        {
-            TodoItems = new List<TodoItem>();
-        }
+        public bool IsHidden { get; set; }
 
     }
 }

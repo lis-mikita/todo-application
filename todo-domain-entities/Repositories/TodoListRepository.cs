@@ -44,10 +44,15 @@ namespace todo_domain_entities.Repositories
 
         public void Delete(int id)
         {
-            TodoList item = _context.TodoLists.Find(id);
-            if (item != null)
+            TodoList list = _context.TodoLists.Find(id);
+            if (list != null)
             {
-                _context.TodoLists.Remove(item);
+                foreach (var item in _context.TodoItems.Where(x => x.ToDoListId == id))
+                {
+                    _context.TodoItems.Remove(item);
+                }
+
+                _context.TodoLists.Remove(list);
                 // TODO: Delete items form TodoItems
             }
         }

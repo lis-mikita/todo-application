@@ -14,11 +14,6 @@ namespace todo_domain_entities.EntitiesBL
 
         public string Description { get; set; }
 
-        public List<TodoItemBL> TodoItems { get; set; }
-
-        public TodoListBL()
-        {
-            TodoItems = new List<TodoItemBL>();
-        }
+        public bool IsHidden { get; set; }
     }
 }

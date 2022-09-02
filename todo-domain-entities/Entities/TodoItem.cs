@@ -27,7 +27,6 @@ namespace todo_domain_entities.Entities
 
 
         [DataType(DataType.DateTime)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public DateTime CreatedDate 
         {
             get => _createdDate.ToUniversalTime();
@@ -44,7 +43,6 @@ namespace todo_domain_entities.Entities
 
         public int? ToDoListId { get; set; }
 
-        public TodoList todoList { get; set; }
     }
 
     public enum TodoItemStatus

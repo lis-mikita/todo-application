@@ -34,7 +34,6 @@ namespace todo_domain_entities.EntitiesBL
 
         public int? ToDoListId { get; set; }
 
-        public TodoListBL todoList { get; set; }
     }
 
     public enum TodoItemStatus

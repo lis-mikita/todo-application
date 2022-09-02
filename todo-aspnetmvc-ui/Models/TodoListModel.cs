@@ -13,11 +13,6 @@ namespace todo_aspnetmvc_ui.Models
 
         public string Description { get; set; }
 
-        public List<TodoItemModel> TodoItems { get; set; }
 
-        public TodoListModel()
-        {
-            TodoItems = new List<TodoItemModel>();
-        }
     }
 }

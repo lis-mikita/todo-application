@@ -16,7 +16,7 @@
     </p>
     <p>
         @using todo_aspnetmvc_ui.Models
-        <select name="status" value="@Model.Status" >
+        <select name="status" value="@TodoItemStatus.Completed">
             <option value="@TodoItemStatus.Completed">Completed</option>
             <option value="@TodoItemStatus.InProgress">In progress</option>
             <option value="@TodoItemStatus.NotStarted">Not started</option>

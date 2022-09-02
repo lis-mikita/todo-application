@@ -33,8 +33,6 @@ namespace todo_aspnetmvc_ui.Models
 
         public int? ToDoListId { get; set; }
 
-        public TodoListModel todoList { get; set; }
-
     }
 
     public enum TodoItemStatus

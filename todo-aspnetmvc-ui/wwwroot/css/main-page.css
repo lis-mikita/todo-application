@@ -4,6 +4,42 @@
     font-style: normal;
 }
 
+.b-0 {
+    border: 0px;
+}
+
+.b-r-4 {
+    border-radius: 4px;
+}
+
+#datetime {
+    position: relative;
+    width: 160px;
+    height: 30px;
+    color: white;
+    border: 0px;
+    padding-top: 4px;
+}
+
+    #datetime:before {
+        position: absolute;
+        content: attr(data-date);
+        display: inline-block;
+        color: black;
+    }
+
+    #datetime::-webkit-datetime-edit, #datetime::-webkit-inner-spin-button, #datetime::-webkit-clear-button {
+        display: none;
+    }
+
+    #datetime::-webkit-calendar-picker-indicator {
+        position: absolute;
+        top: 3px;
+        right: 0;
+        color: black;
+        opacity: 1;
+    }
+
 /*Header*/
 
 .header {
@@ -13,12 +49,15 @@
     height: 65px;
     top: 0px;
     left: 0px;
-    background: #FFFFFF;
     border-bottom: 1px solid #E9ECEF;
-
     /* Shadow */
 
     box-shadow: 0px 10px 30px rgba(17, 38, 146, 0.05);
+}
+
+#header {
+    position: fixed;
+    background: #FFFFFF;
 }
 
 .container-fluid {
@@ -44,7 +83,6 @@ a.links {
     font-weight: 700;
     font-size: 24px;
     line-height: 23px;
-
     /* Main Color Text */
     color: #232D42;
 }
@@ -62,7 +100,6 @@ a.links {
 .bell {
     width: 24px;
     height: 24px;
-
     color: #8A92A6;
 }
 
@@ -80,7 +117,6 @@ a.links {
 img.user {
     width: 45px;
     height: 45px;
-
     border-radius: 30px;
 }
 
@@ -100,7 +136,6 @@ p.name {
     font-size: 16px;
     line-height: 175%;
     margin-bottom: 0;
-
     /* Main Color Text */
     color: #232D42;
 }
@@ -111,7 +146,6 @@ p.title {
     font-weight: 400;
     font-size: 13px;
     line-height: 130%;
-
     /* Main Grey */
     color: #8A92A6;
 }
@@ -142,8 +176,7 @@ p.title {
     padding: 0px;
     gap: 16px;
     width: 181px;
-    height: 299px;
-
+    height: 100%;
     background-color: white;
 }
 
@@ -175,7 +208,6 @@ span.header-title-workspace-side-menu {
     display: flex;
     align-items: center;
     text-align: left;
-
     /* Main Color Text */
 
     color: #232D42;
@@ -202,7 +234,7 @@ span.three-dots-title-workspace-side-menu {
     padding: 0px;
     gap: 8px;
     width: 181px;
-    height: 217px;
+    height: 100%;
 }
 
 .help-menu-workspace-side-menu {
@@ -221,11 +253,10 @@ span.three-dots-title-workspace-side-menu {
     padding: 0px;
     width: 155px;
     height: 28px;
-
     flex-grow: 1;
 }
 
-a.title-help-menu-workspace-side-menu {
+p.title-help-menu-workspace-side-menu {
     width: 155px;
     height: 28px;
     font-weight: 500;
@@ -233,9 +264,21 @@ a.title-help-menu-workspace-side-menu {
     line-height: 175%;
     align-items: center;
     text-align: left;
-
     /* Main Color Text */
     color: #232D42;
+}
+
+.select {
+    width: 100%;
+    height: 100%;
+}
+
+#dropdownLists1, #dropdownList1 {
+    padding: 0px;
+    background-color: #FFF;
+    border-color: #FFF;
+    width: 25px;
+    height: 25px;
 }
 
 .three-dotz-help-menu-workspace-side-menu {
@@ -248,7 +291,6 @@ span.three-dotz-help-menu-workspace-side-menu {
     width: 14.62px;
     height: 3.38px;
     align-items: center;
-
     /* Main Grey */
     color: #8A92A6;
 }
@@ -291,7 +333,7 @@ span.three-dotz-help-menu-workspace-side-menu {
     align-items: center;
     padding: 0px;
     gap: 8px;
-    width: 88px;
+    width: 147px;
     height: 25px;
 }
 
@@ -300,16 +342,21 @@ span.three-dotz-help-menu-workspace-side-menu {
     height: 18px;
 }
 
-span.eye-status-item-messages-spreadsheets { 
+button.eye-status-item-messages-spreadsheets {
+    padding: 0px;
+    border: 0px;
+    background-color: #FFF;
+}
+
+span.eye-status-item-messages-spreadsheets {
     align-items: center;
     font-size: 18px;
-
     /* Main Grey */
     color: #8A92A6;
 }
 
 a.status-item-messages-spreadsheets {
-    width: 73px;
+    width: 121px;
     height: 25px;
     font-weight: 400;
     font-size: 14px;
@@ -318,10 +365,8 @@ a.status-item-messages-spreadsheets {
     align-items: center;
     text-align: left;
     padding: 0px 0px;
-
     /* Main Color Text */
     color: #232D42;
-
     /* Inside auto layout */
     flex: none;
     order: 1;
@@ -335,7 +380,6 @@ a.status-item-messages-spreadsheets {
 
 span.three-dotz-item-messages-spreadsheets {
     align-items: center;
-
     /* Main Grey */
     color: #8A92A6;
 }
@@ -380,34 +424,24 @@ span.three-dotz-item-messages-spreadsheets {
     gap: 0px;
 }
 
-.title-item-messages-spreadsheets-create {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px;
-    gap: 8px;
-    width: 155px;
-    height: 18px;
-
-    /* Inside auto layout */
-    flex-grow: 1;
-}
-
-span.title-item-messages-spreadsheets-create {
-    width: 83px;
-    height: 12px;
+button.item-messages-spreadsheets-create {
+    height: 20px;
     font-weight: 400;
     font-size: 16px;
-    line-height: 175%;
-    box-sizing: content-box;
+    line-height: 20px;
+    background: #FFFFFF;
+    border-color: white;
+    padding: 0px 0px;
+    color: #212529;
     display: flex;
-    align-items: center;
-    padding-left: 26px;
-    text-align: center;
-
-    /* Main Grey */
     color: #8A92A6;
+    padding-left: 26px;
+    gap: 54px;
 }
+
+    button.item-messages-spreadsheets-create:hover {
+        color: #212529;
+    }
 
 .plus-circle-item-messages-spreadsheets-create {
     width: 18px;
@@ -418,9 +452,6 @@ span.title-item-messages-spreadsheets-create {
 span.plus-circle-item-messages-spreadsheets-create {
     align-items: center;
     font-size: 18px;
-    
-    /* Main Grey */
-    color: #8A92A6;
 }
 
 /*Main*/
@@ -430,7 +461,8 @@ span.plus-circle-item-messages-spreadsheets-create {
     left: 228px;
     top: 65px;
     position: fixed;
-    width: calc(100% - 227px);
+    width: calc(100% - 228px);
+    z-index: -1;
 }
 
 figure {
@@ -439,12 +471,12 @@ figure {
     float: left;
 }
 
-figure img {
-    display: unset;
-    margin: unset;
-    width: 100%;
-    height: 160px;
-}
+    figure img {
+        display: unset;
+        margin: unset;
+        width: 100%;
+        height: 160px;
+    }
 
 .main {
     display: flex;
@@ -453,17 +485,19 @@ figure img {
     padding: 0px;
     left: 252px;
     top: 241px;
-    position: fixed;
+    position: absolute;
     min-width: 975px;
     width: calc(100% - 252px);
     padding-right: 20px;
+    padding-bottom: 20px;
+    z-index: -2;
 }
 
 .header-main {
     flex-direction: column;
     padding: 0px;
     gap: 0px;
-    height: 135px;
+    height: auto;
     margin-bottom: 32px;
     width: 100%;
     margin-right: 24px;
@@ -475,6 +509,9 @@ figure img {
     font-weight: 700;
     font-size: 40px;
     line-height: 175%;
+    background: #F7F7F7;
+    border: 0px;
+    resize: none;
 
     /* Main Color Text */
     color: #232D42;
@@ -486,6 +523,9 @@ figure img {
     font-weight: 300;
     font-size: 20px;
     line-height: 175%;
+    background: #F7F7F7;
+    border: 0px;
+    resize: none;
 
     /* Main Color Text */
     color: #232D42;
@@ -497,7 +537,6 @@ figure img {
     align-items: flex-start;
     padding: 0px;
     width: 100%;
-
     /* Shadow */
     filter: drop-shadow(0px 10px 30px rgba(17, 38, 146, 0.05));
     border-radius: 16px;
@@ -519,7 +558,7 @@ figure img {
     border-top-right-radius: 4px;
 }
 
-button.item-buttons-settings-table-main {
+select.item-buttons-settings-table-main {
     height: 20px;
     font-weight: 500;
     font-size: 16px;
@@ -544,7 +583,7 @@ button.item-buttons-settings-table-main {
     color: #232D42;
 }
 
-tr  {
+tr {
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
@@ -552,10 +591,8 @@ tr  {
     align-items: center;
     text-align: center;
     vertical-align: middle;
-
     /* identical to box height */
     letter-spacing: 1.33333px;
-
     /* Main Color Text */
     color: #232D42;
 }
@@ -609,11 +646,21 @@ tr  {
     padding-right: 2%;
 }
 
+.title-table {
+    background-image: linear-gradient(to bottom, transparent calc(50% - 1px), gray, transparent calc(50% + 1px));
+}
+
 #col-description {
     width: 24%;
     text-align: left;
     padding: 0px;
     padding-right: 2%;
+}
+
+.textarea-table {
+    height: 23px;
+    resize: none;
+    width: 100%;
 }
 
 #col-due-date {
@@ -644,7 +691,27 @@ tr  {
     padding-right: 3%;
 }
 
-#dropdownMenuButton1 {
+button.col-dotz {
+    padding: 0px;
+    background: #FFF;
+    width: 32px;
+    border: 0px;
+}
+
+button.col-dotz:hover {
+    background: #FFF;
+}
+
+span.col-dotz {
+    color: #6C757D;
+}
+
+#dropdownListTable::after {
+    border-left: 0px;
+    margin-left: 0px;
+}
+
+#selectMenuButton1 {
     width: 140px;
     height: 30px;
     font-weight: 400;

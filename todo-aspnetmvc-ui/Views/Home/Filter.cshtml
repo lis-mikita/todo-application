@@ -179,7 +179,7 @@
                 <form method="get" asp-controller="Home" asp-action="Filter" style="display: contents;">
                     <div>
                         <select class="form-select item-buttons-settings-table-main b-0" name="sortBy" onchange="this.form.submit();" id="sortBy">
-                            <option value="order" hidden selected>Sort By:</option>
+                            <option value="@ViewBag.Sort" hidden selected>Sort By: @ViewBag.Sort</option>
                             <option value="order">Sort By: order</option>
                             <option value="title">Sort By: title</option>
                             <option value="description">Sort By: description</option>
@@ -190,12 +190,12 @@
                     </div>
                     <div>
                         <select class="form-select item-buttons-settings-table-main b-0" name="groupBy" onchange="this.form.submit();" id="groupBy">
-                            <option value="groupBy" hidden selected>Group By:</option>
+                            <option value="@ViewBag.Group" hidden selected>Group By: @ViewBag.Group</option>
                         </select>
                     </div>
                     <div>
                         <select class="form-select item-buttons-settings-table-main b-0" name="filterBy" onchange="this.form.submit();" id="filterBy">
-                            <option value="all" hidden selected>Filter By:</option>
+                            <option value="@ViewBag.Filter" hidden selected>Filter By: @ViewBag.Filter</option>
                             <option value="all">Filter By: all</option>
                             <option value="completed">Filter By: completed</option>
                             <option value="inProgress">Filter By: in progress</option>

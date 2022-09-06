@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
@@ -8,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using todo_aspnetmvc_ui.Models;
 using todo_aspnetmvc_ui.ViewModels;
@@ -17,6 +19,7 @@ using todo_domain_entities.EntitiesBL;
 
 namespace todo_aspnetmvc_ui.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -24,6 +27,8 @@ namespace todo_aspnetmvc_ui.Controllers
         private Mapper MapperList { get; }
 
         private Mapper MapperItem { get; }
+
+        private Mapper MapperUser { get; }
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -36,6 +41,10 @@ namespace todo_aspnetmvc_ui.Controllers
             var configItem = new MapperConfiguration(cfg =>
                 cfg.CreateMap<TodoItemBL, TodoItemModel>().ReverseMap());
             MapperItem = new Mapper(configItem);
+
+            var configUser = new MapperConfiguration(cfg =>
+                cfg.CreateMap<UserBL, UserModel>().ReverseMap());
+            MapperUser = new Mapper(configUser);
         }
 
         public void ChangeList(int id, string title, string description)
@@ -84,26 +93,70 @@ namespace todo_aspnetmvc_ui.Controllers
             }
         }
 
+        [Route("/hidden/{id}")]
+        public IActionResult HiddenList(int id)
+        {
+            using (var db = new BL())
+            {
+                var todoList = db.FindTodoList(id);
+                
+                if (todoList.IsHidden)
+                {
+                    todoList.IsHidden = false;
+                }
+                else
+                {
+                    todoList.IsHidden = true;
+                }
+
+                db.UpdateTodoList(MapperList.Map<TodoListBL>(todoList));
+
+                return Redirect($"/{id}");
+            }
+        }
+
         [Route("/{id?}")]
         public IActionResult Index(int id = 0)
         {
             using (var db = new BL())
             {
-                if (db.FindTodoList(id) != null)
+                var user = MapperUser.Map<UserModel>(db.GetUsers()
+                    .FirstOrDefault(x => x.Email == User.Identity.Name));
+
+                var firstList = db.GetTodoLists().FirstOrDefault(x => x.UserId == user.Id);
+
+                if (firstList == null)
                 {
                     // Not action
                 }
                 else
                 {
-                    id = db.GetTodoLists().First().Id;
+                    if (id == 0)
+                    {
+                        id = firstList.Id;
+                    }
                 }
-                IndexViewModel model = new IndexViewModel()
+
+                var userIndex = new UserIndexModel()
                 {
-                    TodoLists = MapperList.Map<List<TodoListModel>>(db.GetTodoLists())
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email
                 };
 
-                IEnumerable<TodoItemModel> m = MapperItem.Map<List<TodoItemModel>>(db.GetTodoItems())
-                    .Where(x => x.ToDoListId == model.TodoLists.First(x => x.Id == id).Id);
+                IndexViewModel model = new IndexViewModel()
+                {
+                    TodoLists = MapperList.Map<List<TodoListModel>>(db.GetTodoLists()
+                    .Where(x => x.UserId == user.Id)),
+                    User = userIndex
+                };
+
+                IEnumerable<TodoItemModel> m = null;
+                if (firstList != null)
+                {
+                    m = MapperItem.Map<List<TodoItemModel>>(db.GetTodoItems())
+                        .Where(x => x.ToDoListId == model.TodoLists.FirstOrDefault(x => x.Id == id).Id);
+                }
 
                 model.TodoItems = m;
 
@@ -191,17 +244,25 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             using (var db = new BL())
             {
-                int number = db.GetTodoLists().Count(x => x.Title.Contains("Template"));
+                var user = MapperUser.Map<UserModel>(db.GetUsers()
+                    .FirstOrDefault(x => x.Email == User.Identity.Name));
+
+                int number = db.GetTodoLists()
+                    .Where(x => x.UserId == user.Id)
+                    .Count(x => x.Title.Contains("Template"));
                 number++;
 
                 var todoList = new TodoListModel()
                 {
                     Title = $"Template{number}",
-                    Description = $"About todolist \"Template{number}\"."
+                    Description = $"About todolist \"Template{number}\".",
+                    IsHidden = false,
+                    UserId = user.Id,
                 };
 
                 db.AddTodoList(MapperList.Map<TodoListBL>(todoList));
-                int id = db.GetTodoLists().Last().Id;
+                int id = db.GetTodoLists()
+                    .Last(x => x.UserId == user.Id).Id;
 
                 return Redirect($"/{id}");
             }
@@ -240,7 +301,7 @@ namespace todo_aspnetmvc_ui.Controllers
             {
                 db.RemoveTodoList(id);
 
-                return Redirect($"/1");
+                return Redirect($"/0");
             }
         }
 
@@ -269,10 +330,12 @@ namespace todo_aspnetmvc_ui.Controllers
                 {
                     Title = $"{todoListOld.Title}{number}",
                     Description = todoListOld.Description,
+                    IsHidden = false,
+                    UserId = todoListOld.UserId
                 };
 
                 db.AddTodoList(MapperList.Map<TodoListBL>(todoListNew));
-                int idNew = db.GetTodoLists().Last().Id;
+                int idNew = db.GetTodoLists().Last(x => x.UserId == todoListOld.UserId).Id;
 
                 foreach (var item in MapperItem.Map<List<TodoItemModel>>(db.GetTodoItems().Where(x => x.ToDoListId == id)))
                 {

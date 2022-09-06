@@ -1,0 +1,61 @@
+﻿@model todo_aspnetmvc_ui.ViewModels.RegisterModel
+
+@{
+    Layout = "_LayoutRegister";
+}
+
+<div class="register">
+    <div class="header">
+        <a class="header" href="/Account/Register">TODOCKER</a>
+    </div>
+    <div class="sign-up">
+        <div class="content">
+            <div class="title">
+                <h3 class="title">Sign Up</h3>
+                <p class="title">Create your account</p>
+            </div>
+            <form class="form-data" asp-action="Register" asp-controller="Account" asp-anti-forgery="true">
+                <div class="validation" asp-validation-summary="ModelOnly"></div>
+                <div class="input-data">
+                    <div class="form-gr">
+                        <label class="form-gr" asp-for="Name">Name</label>
+                        <input class="form-gr" type="text" asp-for="Name" />
+                        <span asp-validation-for="Name" />
+                    </div>
+                    <div class="form-gr">
+                        <label class="form-gr" asp-for="Email">Email</label>
+                        <input class="form-gr" type="text" asp-for="Email" />
+                        <span asp-validation-for="Email" />
+                    </div>
+                    <div class="form-gr">
+                        <label class="form-gr" asp-for="Password">Password</label>
+                        <input class="form-gr" type="text" asp-for="Password" />
+                        <span asp-validation-for="Password" />
+                    </div>
+                    <div class="form-gr">
+                        <label class="form-gr" asp-for="ConfirmPassword">Confirm Password</label>
+                        <input class="form-gr" type="text" asp-for="ConfirmPassword" />
+                        <span asp-validation-for="ConfirmPassword" />
+                    </div>
+                    <div class="agree">
+                        <input class="agree" type="checkbox" />
+                        <p class="agree">I agree with the terms of use</p>
+                    </div>
+                </div>
+                <button class="btn form-data" type="submit">
+                    <p class="form-data">Sign Up</p>
+                </button>
+                <div class="login">
+                    <p class="login">Already have an Account</p>
+                    <a class="login" href="/Account/Login">Sign in</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="img-register-page">
+    <figure class="img-register-page">
+        <img class="img-register-page" src="~/media/side-account.jpg" />
+    </figure>
+</div>

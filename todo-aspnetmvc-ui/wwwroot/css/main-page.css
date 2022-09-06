@@ -244,6 +244,7 @@ span.three-dots-title-workspace-side-menu {
     padding: 0px;
     width: 181px;
     height: 28px;
+    gap: 8px
 }
 
 .title-help-menu-workspace-side-menu {
@@ -279,17 +280,27 @@ p.title-help-menu-workspace-side-menu {
     border-color: #FFF;
     width: 25px;
     height: 25px;
+    border: 0px;
+}
+
+button.drop-list {
+    padding: 0px;
+    background-color: #FFF;
+    border-color: #FFF;
+    width: 25px;
+    height: 25px;
+    border: 0px;
 }
 
 .three-dotz-help-menu-workspace-side-menu {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
     justify-content: flex-end;
 }
 
 span.three-dotz-help-menu-workspace-side-menu {
-    width: 14.62px;
-    height: 3.38px;
+    width: auto;
+    height: 100%;
     align-items: center;
     /* Main Grey */
     color: #8A92A6;
@@ -374,8 +385,8 @@ a.status-item-messages-spreadsheets {
 }
 
 .three-dotz-item-messages-spreadsheets {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
 }
 
 span.three-dotz-item-messages-spreadsheets {

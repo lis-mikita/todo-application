@@ -8,5 +8,7 @@ namespace todo_aspnetmvc_ui.ViewModels
         public IEnumerable<TodoItemModel> TodoItems { get; set; }
 
         public IEnumerable<TodoListModel> TodoLists { get; set; }
+
+        public UserIndexModel User { get; set; }
     }
 }

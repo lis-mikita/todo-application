@@ -20,10 +20,10 @@
                 </span>
             </div>
             <div class="user">
-                <img class="user" src="~/Media/beared-guy02-min.jpg" />
+                <img class="user" src="~/media/beared-guy02-min.jpg" />
                 <div class="info">
-                    <p class="name">Mikita Lis</p>
-                    <p class="title">.Net Developer</p>
+                    <p class="name">@Model.User.Name</p>
+                    <p class="title">@Model.User.Email</p>
                 </div>
             </div>
         </div>
@@ -53,40 +53,49 @@
                             </span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownLists1">
-                            <li><a class="dropdown-item" href="#">Show hidden</a></li>
+                            <li><a class="dropdown-item" onclick="ShowHidden('spreadsheets');">Show hidden</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <ul class="nav nav-pills flex-column">
-                @foreach (var item in Model.TodoLists)
+                @foreach (var item in Model.TodoLists.OrderBy(x => x.IsHidden) ?? Enumerable.Empty<TodoListModel>())
                 {
-                    <li class="spreadsheets">
+                    string hidden = "";
+                    string icon = "visibility";
+                    string liDrop = "Hide";
+                    if (item.IsHidden == true)
+                    {
+                        hidden = "hidden";
+                        icon = "visibility_off";
+                        liDrop = "Show";
+                    }
+                    <li class="spreadsheets" id="li @item.Id" @hidden>
                         <div class="messages-spreadsheets">
                             <div class="item-messages-spreadsheets">
                                 <div class="status-item-messages-spreadsheets">
                                     <form method="get" class="eye-status-item-messages-spreadsheets">
                                         <button type="submit" value="Send" asp-controller="Home" asp-action="Index" class="eye-status-item-messages-spreadsheets">
-                                            <span class="material-symbols-outlined eye-status-item-messages-spreadsheets">
-                                                visibility
+                                            <span class="material-symbols-outlined eye-status-item-messages-spreadsheets" id="span @item.Id">
+                                                @icon
                                             </span>
                                         </button>
                                     </form>
                                     <a href="/@item.Id" class="nav-link link-dark status-item-messages-spreadsheets">
-                                        <label id="todoList @item.Id">
+                                        <label id="todoList @item.Id" style="margin: 0px;">
                                             @item.Title
                                         </label>
                                     </a>
                                 </div>
                                 <div class="three-dotz-item-messages-spreadsheets">
                                     <div class="dropdown">
-                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownList1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="btn btn-secondary dropdown-toggle drop-list" type="button" id="dropdownList1 @item.Id" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span class="material-symbols-outlined three-dotz-item-messages-spreadsheets">
                                                 more_horiz
                                             </span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownList1">
-                                            <li><a class="dropdown-item" href="#">Hide</a></li>
+                                            <li><a class="dropdown-item" onclick="HideList('li @item.Id', 'input @item.Id', 'span @item.Id', 'liDrop @item.Id');" id="liDrop @item.Id">@liDrop</a></li>
                                             <li><a class="dropdown-item" href="/copy/@item.Id">Copy</a></li>
                                             <li><a class="dropdown-item" href="/delete/@item.Id">Delete</a></li>
                                         </ul>
@@ -94,6 +103,7 @@
                                 </div>
                             </div>
                         </div>
+                        <a href="/hidden/@item.Id" id="input @item.Id" hidden></a>
                     </li>
                 }
             </ul>
@@ -120,7 +130,7 @@
 <!--Main image-->
 <div class="img-main">
     <figure>
-        <img src="Media/rectangle-main.jpg" />
+        <img src="media/rectangle-main.jpg" />
     </figure>
 </div>
 
@@ -128,9 +138,19 @@
 <div class="main">
     <div class="header-main">
         <div style="padding-bottom: 10px;">
+            @{
+                var firstList = @Model.TodoLists.FirstOrDefault(x => x.Id == ViewBag.Id);
+                string headerTitle = "";
+                string headerDescription = "";
+                if (firstList != null)
+                {
+                    headerTitle = firstList.Title;
+                    headerDescription = firstList.Description;
+                }
+            }
             <form method="post" asp-controller="Home" asp-action="ChangeList" onchange="ChangeTitleTodoList('todoList @ViewBag.Id', 'listTitle')" target="ChangeList">
-                <textarea name="title" id="listTitle" class="title-header-main" onchange="this.form.submit()">@Model.TodoLists.First(x => x.Id == ViewBag.Id).Title</textarea>
-                <textarea name="description" class="description-header-main" onchange="this.form.submit()">@Model.TodoLists.First(x => x.Id == ViewBag.Id).Description</textarea>
+                <textarea name="title" id="listTitle" class="title-header-main" onchange="this.form.submit()">@headerTitle</textarea>
+                <textarea name="description" class="description-header-main" onchange="this.form.submit()">@headerDescription</textarea>
                 <input type="hidden" value="@ViewBag.Id" name="id" />
             </form>
         </div>
@@ -140,7 +160,7 @@
                 double countNoDone = 0;
                 double countTask = 0;
             }
-            @foreach (var item in Model.TodoItems)
+            @foreach (var item in Model.TodoItems ?? Enumerable.Empty<TodoItemModel>())
             {
                 if (item.Status != TodoItemStatus.Completed)
                 {
@@ -223,7 +243,7 @@
                 @{
                     int i = 1;
                 }
-                @foreach (var item in Model.TodoItems)
+                @foreach (var item in Model.TodoItems ?? Enumerable.Empty<TodoItemModel>())
                 {
                     <tr>
                         <td id="col-numer" scope="row">@i</td>

@@ -21,5 +21,15 @@ namespace todo_domain_entities.Entities
 
         public bool IsHidden { get; set; }
 
+        public List<TodoItem> TodoItems { get; set; }
+
+        public TodoList()
+        {
+            TodoItems = new List<TodoItem>();
+        }
+
+        public int? UserId { get; set; }
+
+        public User User { get; set; }
     }
 }

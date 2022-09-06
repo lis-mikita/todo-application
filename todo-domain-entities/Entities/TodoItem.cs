@@ -42,6 +42,8 @@ namespace todo_domain_entities.Entities
         }
 
         public int? ToDoListId { get; set; }
+        
+        public TodoList TodoList { get; set; }
 
     }
 

@@ -10,8 +10,8 @@ using todo_domain_entities.EF;
 namespace todo_domain_entities.Migrations
 {
     [DbContext(typeof(TodoDBContext))]
-    [Migration("20220902141022_Add hidden in List")]
-    partial class AddhiddeninList
+    [Migration("20220905165319_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,6 +52,8 @@ namespace todo_domain_entities.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ToDoListId");
+
                     b.ToTable("TodoItems");
                 });
 
@@ -66,14 +68,57 @@ namespace todo_domain_entities.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("TodoLists");
+                });
+
+            modelBuilder.Entity("todo_domain_entities.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("todo_domain_entities.Entities.TodoItem", b =>
+                {
+                    b.HasOne("todo_domain_entities.Entities.TodoList", "TodoList")
+                        .WithMany("TodoItems")
+                        .HasForeignKey("ToDoListId");
+                });
+
+            modelBuilder.Entity("todo_domain_entities.Entities.TodoList", b =>
+                {
+                    b.HasOne("todo_domain_entities.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

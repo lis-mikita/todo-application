@@ -15,5 +15,7 @@ namespace todo_domain_entities.EntitiesBL
         public string Description { get; set; }
 
         public bool IsHidden { get; set; }
+
+        public int? UserId { get; set; }
     }
 }

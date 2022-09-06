@@ -13,6 +13,7 @@ namespace todo_domain_entities
         private TodoDBContext DataBase { get; }
         private TodoListRepository todoListRepository;
         private TodoItemRepository todoItemRepository;
+        private UserRepository userRepository;
 
         public UnitOfWork()
         {
@@ -36,6 +37,16 @@ namespace todo_domain_entities
                 todoItemRepository ??= new TodoItemRepository(DataBase);
 
                 return todoItemRepository;
+            }
+        }
+
+        public IRepository<User> Users
+        {
+            get
+            {
+                userRepository ??= new UserRepository(DataBase);
+
+                return userRepository;
             }
         }
 

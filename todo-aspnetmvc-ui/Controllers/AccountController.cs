@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using System.Linq;
 using AutoMapper;
 using todo_domain_entities.EntitiesBL;
 using todo_aspnetmvc_ui.ViewModels;
+using System;
 
 namespace todo_aspnetmvc_ui.Controllers
 {
@@ -25,8 +27,16 @@ namespace todo_aspnetmvc_ui.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
+            if (Request.Cookies["Email"] != null && Request.Cookies["Password"] != null)
+            {
+                LoginModel model = new LoginModel();
+                model.Email = Request.Cookies["Email"].ToString();
+                model.Password = Request.Cookies["Password"].ToString();
+                return await Login(model);
+            }
+
             return View();
         }
 
@@ -34,6 +44,31 @@ namespace todo_aspnetmvc_ui.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
+            if (Request.Cookies["Email"] != null && Request.Cookies["Password"] != null)
+            {
+                model.Email = Request.Cookies["Email"].ToString();
+                model.Password = Request.Cookies["Password"].ToString();
+            }
+            else
+            {
+                CookieOptions cookieOptions = new CookieOptions();
+                Response.Cookies.Append("Email", model.Email);
+                Response.Cookies.Append("Password", model.Password);
+
+                if (model.RememberMe)
+                {
+                    cookieOptions.Expires = DateTime.Now.AddDays(30);
+                    Response.Cookies.Delete("Email", cookieOptions);
+                    Response.Cookies.Delete("Password", cookieOptions);
+                }
+                else
+                {
+                    cookieOptions.Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies.Delete("Email", cookieOptions);
+                    Response.Cookies.Delete("Password", cookieOptions);
+                }
+            }
+
             using (var db = new BL())
             {
                 if (ModelState.IsValid)
@@ -69,8 +104,9 @@ namespace todo_aspnetmvc_ui.Controllers
                     if (user == null)
                     {
                         // add user to bd
-                        UserModel userNew = new UserModel { 
-                            Email = model.Email, 
+                        UserModel userNew = new UserModel
+                        {
+                            Email = model.Email,
                             Password = model.Password,
                             Name = model.Name
                         };
@@ -105,6 +141,11 @@ namespace todo_aspnetmvc_ui.Controllers
 
         public async Task<IActionResult> Logout()
         {
+            CookieOptions cookieOptions = new CookieOptions();
+            cookieOptions.Expires = DateTime.Now.AddDays(-1);
+            Response.Cookies.Delete("Email", cookieOptions);
+            Response.Cookies.Delete("Password", cookieOptions);
+
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }

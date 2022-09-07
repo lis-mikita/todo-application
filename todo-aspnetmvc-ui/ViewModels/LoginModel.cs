@@ -10,5 +10,7 @@ namespace todo_aspnetmvc_ui.ViewModels
         [Required(ErrorMessage = "Password isn't entered")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        public bool RememberMe { get; set; }
     }
 }

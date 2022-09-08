@@ -188,6 +188,8 @@
                 {
                     precentProgressBar = String.Format("{0:N2}", countNoDone * 100 / countTask);
                 }
+                precentProgressBar = "0";
+                countNoDone = 0;
             }
             <div class="progress-bar" role="progressbar" style="width: @precentProgressBar%;" aria-valuenow="@precentProgressBar" aria-valuemin="0" aria-valuemax="100" id="progressBar">
                 @precentProgressBar%
@@ -294,7 +296,7 @@
                         <td id="col-create-date" class="c">@item.CreatedDate.ToString("dd MMMM yyyy")</td>
                         <td id="col-status">
                             <div class="form-floating select">
-                                <select class="form-select b-r-4 b-c-i c" name="status" onchange="this.form.submit(); ChangeDone('flexCheckDefault @item.Id', 'selectMenuButton1 @item.Id', 'textareaTitle @item.Id', 'progressBar', '@countTask');" id="selectMenuButton1 @item.Id">
+                                <select class="form-select b-r-4 b-c-i c status-progress" name="status" onchange="this.form.submit(); ChangeDone('flexCheckDefault @item.Id', 'selectMenuButton1 @item.Id', 'textareaTitle @item.Id', 'progressBar', '@countTask');" id="selectMenuButton1 @item.Id">
                                         @{
                                             string select = "";
                                             if (item.Status == TodoItemStatus.Completed)

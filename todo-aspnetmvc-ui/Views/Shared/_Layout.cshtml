@@ -66,34 +66,35 @@
             let select = document.getElementById(idSelect).value;
             let title = document.getElementById(idTitle);
 
-            var roundedZero = function (number) {
-                return +number.toFixed(0);
-            }
-
-            let progressBar = document.getElementById(idProgressBar);
-            let countDone = roundedZero(progressBar.ariaValueNow / 100 * countTask);
-
             if (select == "Completed" && checkBox.checked == false) {
                 checkBox.checked = true;
                 title.style.backgroundImage = "linear-gradient(to bottom, transparent calc(50% - 1px), gray, transparent calc(50% + 1px))";
-                countDone++;
             }
             else if ((select == "InProgress" && checkBox.checked == true)
                 || (select == "NotStarted" && checkBox.checked == true)) {
                 checkBox.checked = false;
                 title.style.backgroundImage = "none";
-                countDone--;
             }
 
-            if (countDone < 0) {
-                countDone = 0;
+            let statusProgress = document.getElementsByClassName('status-progress');
+            let progressBar = document.getElementById(idProgressBar);
+            let countDone = 0;
+
+            for (i = 0; i < statusProgress.length; i++) {
+                if (statusProgress[i].value == "Completed"){
+                    countDone++;
+                }
+            }
+
+            var roundedZero = function (number) {
+                return +number.toFixed(0);
             }
 
             var rounded = function (number) {
                 return +number.toFixed(2);
             }
 
-            let valueNewPB = rounded(countDone * 100 / countTask);
+            let valueNewPB = rounded(roundedZero(countDone) * 100 / countTask);
             progressBar.ariaValueNow = valueNewPB;
             progressBar.innerText = valueNewPB + "%";
             progressBar.setAttribute("style", "width: " + valueNewPB + "%;");

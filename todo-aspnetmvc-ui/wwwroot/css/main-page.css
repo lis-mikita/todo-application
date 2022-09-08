@@ -12,6 +12,22 @@
     border-radius: 4px;
 }
 
+.b-c-i {
+    background-color: inherit;
+}
+
+.c {
+    color: #232D42;
+}
+
+.c-a {
+    color: #232D42;
+}
+
+.c-b {
+    color: black;
+}
+
 #datetime {
     position: relative;
     width: 160px;
@@ -21,18 +37,17 @@
     padding-top: 4px;
 }
 
-    #datetime:before {
+#datetime:before {
         position: absolute;
         content: attr(data-date);
         display: inline-block;
-        color: black;
-    }
+}
 
-    #datetime::-webkit-datetime-edit, #datetime::-webkit-inner-spin-button, #datetime::-webkit-clear-button {
+#datetime::-webkit-datetime-edit, #datetime::-webkit-inner-spin-button, #datetime::-webkit-clear-button {
         display: none;
     }
 
-    #datetime::-webkit-calendar-picker-indicator {
+#datetime::-webkit-calendar-picker-indicator {
         position: absolute;
         top: 3px;
         right: 0;
@@ -114,6 +129,21 @@ a.links {
     height: 45px;
 }
 
+button.user {
+    padding: 0px;
+    background-color: #FFF;
+    border: 0px;
+    display: flex;
+    gap: 16px;
+    width: 153px;
+    height: 45px;
+    justify-content: flex-start;
+}
+
+button.user:hover {
+    background-color: #FFF;
+}
+
 img.user {
     width: 45px;
     height: 45px;
@@ -136,6 +166,7 @@ p.name {
     font-size: 16px;
     line-height: 175%;
     margin-bottom: 0;
+    text-align: initial;
     /* Main Color Text */
     color: #232D42;
 }
@@ -146,6 +177,8 @@ p.title {
     font-weight: 400;
     font-size: 13px;
     line-height: 130%;
+    text-align: initial;
+    margin: 0px;
     /* Main Grey */
     color: #8A92A6;
 }
@@ -177,7 +210,7 @@ p.title {
     gap: 16px;
     width: 181px;
     height: 100%;
-    background-color: white;
+    background-color: inherit;
 }
 
 .title-workspace-side-menu {
@@ -210,7 +243,7 @@ span.header-title-workspace-side-menu {
     text-align: left;
     /* Main Color Text */
 
-    color: #232D42;
+    color: inherit;
 }
 
 .three-dots-title-workspace-side-menu {
@@ -266,7 +299,7 @@ p.title-help-menu-workspace-side-menu {
     align-items: center;
     text-align: left;
     /* Main Color Text */
-    color: #232D42;
+    color: inherit;
 }
 
 .select {
@@ -281,11 +314,12 @@ p.title-help-menu-workspace-side-menu {
     width: 25px;
     height: 25px;
     border: 0px;
+    background-color: inherit;
 }
 
 button.drop-list {
     padding: 0px;
-    background-color: #FFF;
+    background-color: inherit;
     border-color: #FFF;
     width: 25px;
     height: 25px;
@@ -356,7 +390,7 @@ span.three-dotz-help-menu-workspace-side-menu {
 button.eye-status-item-messages-spreadsheets {
     padding: 0px;
     border: 0px;
-    background-color: #FFF;
+    background-color: inherit;
 }
 
 span.eye-status-item-messages-spreadsheets {
@@ -377,7 +411,6 @@ a.status-item-messages-spreadsheets {
     text-align: left;
     padding: 0px 0px;
     /* Main Color Text */
-    color: #232D42;
     /* Inside auto layout */
     flex: none;
     order: 1;
@@ -440,7 +473,7 @@ button.item-messages-spreadsheets-create {
     font-weight: 400;
     font-size: 16px;
     line-height: 20px;
-    background: #FFFFFF;
+    background-color: inherit;
     border-color: white;
     padding: 0px 0px;
     color: #212529;
@@ -450,7 +483,7 @@ button.item-messages-spreadsheets-create {
     gap: 54px;
 }
 
-    button.item-messages-spreadsheets-create:hover {
+button.item-messages-spreadsheets-create:hover {
         color: #212529;
     }
 
@@ -482,7 +515,7 @@ figure {
     float: left;
 }
 
-    figure img {
+figure img {
         display: unset;
         margin: unset;
         width: 100%;
@@ -520,12 +553,11 @@ figure {
     font-weight: 700;
     font-size: 40px;
     line-height: 175%;
-    background: #F7F7F7;
     border: 0px;
     resize: none;
-
     /* Main Color Text */
     color: #232D42;
+    background-color: #F7F7F7;
 }
 
 .description-header-main {
@@ -534,12 +566,17 @@ figure {
     font-weight: 300;
     font-size: 20px;
     line-height: 175%;
-    background: #F7F7F7;
     border: 0px;
     resize: none;
-
     /* Main Color Text */
     color: #232D42;
+    background-color: #F7F7F7;
+}
+
+#progress {
+    border: 0px;
+    border-color: #32383E;
+    border-style: solid;
 }
 
 .table-main {
@@ -567,6 +604,7 @@ figure {
     padding-right: 20px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+    background-color: inherit;
 }
 
 select.item-buttons-settings-table-main {
@@ -579,7 +617,22 @@ select.item-buttons-settings-table-main {
     padding: 0px 0px;
     /* 8A92A6 Text Color 2 */
     color: #8A92A6;
+    background-color: inherit;
 }
+
+button.item-buttons-settings-table-main {
+    padding-bottom: 0px;
+    margin-bottom: 5px;
+}
+
+#addCircle1, #addCircle2 {
+    vertical-align: text-bottom;
+}
+
+#createNew {
+    color: #8A92A6;
+}
+
 
 .table thead th {
     font-weight: 700;
@@ -634,6 +687,7 @@ tr {
     border-radius: 0px 0px 4px 4px;
     height: 47px;
     padding-left: 16px;
+    background-color: inherit;
 }
 
 #col-numer {
@@ -655,6 +709,7 @@ tr {
     text-align: left;
     padding: 0px;
     padding-right: 2%;
+    background-color: inherit;
 }
 
 .title-table {
@@ -666,6 +721,7 @@ tr {
     text-align: left;
     padding: 0px;
     padding-right: 2%;
+    background-color: inherit;
 }
 
 .textarea-table {
@@ -679,6 +735,7 @@ tr {
     text-align: right;
     padding: 0px;
     padding-right: 2%;
+    background-color: inherit;
 }
 
 #col-create-date {
@@ -707,6 +764,7 @@ button.col-dotz {
     background: #FFF;
     width: 32px;
     border: 0px;
+    background-color: inherit;
 }
 
 button.col-dotz:hover {

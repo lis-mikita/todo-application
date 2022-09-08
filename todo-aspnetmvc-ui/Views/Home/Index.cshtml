@@ -4,34 +4,48 @@
 @model IndexViewModel
 
 <!--Header-->
-<nav class="navbar navbar-light bg-light header" id="header">
+<nav class="navbar navbar-light header" id="header">
     <div class="container-fluid">
         <div class="links">
-            <a class="navbar-brand links" href="/">TODOCKER</a>
+            <a class="navbar-brand links" href="/" id="headerA">TODOCKER</a>
         </div>
         <div class="control">
             <div class="custom-control custom-switch">
-                <label class="custom-control-label" for="customSwitch1">Light Mode</label>
-                <input checked="" type="checkbox" class="custom-control-input" id="customSwitch1">
+                @{
+                    string mode = "";
+                    if(Model.User.Mode)
+                    {
+                        mode = "checked";
+                    }
+                }
+                <input type="checkbox" class="custom-control-input" id="customSwitch1" onchange="ChangeStyle();" onclick="ChangeMode();" @mode>
+                <label class="custom-control-label" for="customSwitch1" id="labelCustomSwitch1">Light Mode</label>
+                <a href="/mode/@ViewBag.Id&@Model.User.Id" id="mode" hidden></a>
             </div>
             <div class="bell">
                 <span class="material-symbols-outlined">
                     notifications
                 </span>
             </div>
-            <div class="user">
-                <img class="user" src="~/media/beared-guy02-min.jpg" />
-                <div class="info">
-                    <p class="name">@Model.User.Name</p>
-                    <p class="title">@Model.User.Email</p>
-                </div>
+            <div class="user dropdown">
+                <button class="user btn btn-secondary dropdown-toggle" type="button" id="dropdownListUser" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img class="user" src="~/media/beared-guy02-min.jpg" />
+                    <div class="info">
+                        <p class="name" id="headerName">@Model.User.Name</p>
+                        <p class="title">@Model.User.Email</p>
+                    </div>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownListUser">
+                    <li><a class="dropdown-item">Account</a></li>
+                    <li><a class="dropdown-item" href="/Account/Logout">Log out</a></li>
+                </ul>
             </div>
         </div>
     </div>
 </nav>
 
 <!--Side menu-->
-<div class="side-menu">
+<div class="side-menu" id="sideMenu">
     <div class="workspace-side-menu">
         <div class="title-workspace-side-menu">
             <div class="header-title-workspace-side-menu">
@@ -82,7 +96,7 @@
                                         </button>
                                     </form>
                                     <a href="/@item.Id" class="nav-link link-dark status-item-messages-spreadsheets">
-                                        <label id="todoList @item.Id" style="margin: 0px;">
+                                        <label id="todoList @item.Id" style="margin: 0px;" class="c-a">
                                             @item.Title
                                         </label>
                                     </a>
@@ -149,12 +163,12 @@
                 }
             }
             <form method="post" asp-controller="Home" asp-action="ChangeList" onchange="ChangeTitleTodoList('todoList @ViewBag.Id', 'listTitle')" target="ChangeList">
-                <textarea name="title" id="listTitle" class="title-header-main" onchange="this.form.submit()">@headerTitle</textarea>
-                <textarea name="description" class="description-header-main" onchange="this.form.submit()">@headerDescription</textarea>
+                <textarea name="title" id="listTitle" class="title-header-main" onchange="this.form.submit()" minlength="3" maxlength="50">@headerTitle</textarea>
+                <textarea name="description" id="listDescription" class="description-header-main" onchange="this.form.submit()" maxlength="500">@headerDescription</textarea>
                 <input type="hidden" value="@ViewBag.Id" name="id" />
             </form>
         </div>
-        <div class="progress">
+        <div class="progress" id="progress">
             @{
                 string precentProgressBar = "0.00";
                 double countNoDone = 0;
@@ -162,7 +176,7 @@
             }
             @foreach (var item in Model.TodoItems ?? Enumerable.Empty<TodoItemModel>())
             {
-                if (item.Status != TodoItemStatus.Completed)
+                if (item.Status == TodoItemStatus.Completed)
                 {
                     countNoDone++;
                 }
@@ -180,13 +194,13 @@
             </div>
         </div>
     </div>
-    <div class="table-main">
-        <div class="settings-table-main">
-            <div style="padding-top: 5px;">
+    <div class="table-main" id="tableMain">
+        <div class="settings-table-main" >
+            <div>
                 <form method="post">
-                    <button class="btn item-buttons-settings-table-main" type="submit" style="display: flex;" value=" Send" asp-controller="Home" asp-action="AddItem">
+                    <button id="createNew"  class="btn item-buttons-settings-table-main" type="submit" style="display: flex;" value=" Send" asp-controller="Home" asp-action="AddItem">
                         <div style="padding-right: 5px; padding-top: 1px;">
-                            <span class="material-symbols-outlined " style="font-size: 19px;">
+                            <span class="material-symbols-outlined " style="font-size: 19px;" id="addCircle1">
                                 add_circle
                             </span>
                         </div>
@@ -246,7 +260,7 @@
                 @foreach (var item in Model.TodoItems ?? Enumerable.Empty<TodoItemModel>())
                 {
                     <tr>
-                        <td id="col-numer" scope="row">@i</td>
+                        <td id="col-numer" class="c" scope="row">@i</td>
                         <form method="post" asp-controller="Home" asp-action="ChangeItem" target="ChangeItem">
                         <td id="col-done">
                             <div class="form-check checkbox-table-main">
@@ -269,18 +283,18 @@
                                         styleClass = "title-table";
                                     }
                                 }
-                            <textarea name="title" class="b-0 textarea-table @styleClass" onchange="this.form.submit()" id="textareaTitle @item.Id">@item.Title</textarea>
+                            <textarea name="title" class="b-0 c b-c-i textarea-table @styleClass" onchange="this.form.submit()" id="textareaTitle @item.Id">@item.Title</textarea>
                         </td>
                         <td id="col-description">
-                            <textarea name="description" class="b-0 textarea-table" style="width: 100%;" onchange="this.form.submit()">@item.Description</textarea>
+                            <textarea name="description" class="b-0 c b-c-i textarea-table" style="width: 100%;" onchange="this.form.submit()">@item.Description</textarea>
                         </td>
                         <td id="col-due-date">
-                            <input type="date" data-date="" data-date-format="DD MMMM YYYY" value="@item.DuetoDateTime.ToString("yyyy-MM-dd")" id="datetime" name="datetime" onchange="this.form.submit()">
+                            <input type="date" class="b-c-i c" data-date="" data-date-format="DD MMMM YYYY" value="@item.DuetoDateTime.ToString("yyyy-MM-dd")" id="datetime" name="datetime" onchange="this.form.submit()">
                         </td>
-                        <td id="col-create-date">@item.CreatedDate.ToString("dd MMMM yyyy")</td>
+                        <td id="col-create-date" class="c">@item.CreatedDate.ToString("dd MMMM yyyy")</td>
                         <td id="col-status">
                             <div class="form-floating select">
-                                <select class="form-select b-r-4" name="status" onchange="this.form.submit(); ChangeDone('flexCheckDefault @item.Id', 'selectMenuButton1 @item.Id', 'textareaTitle @item.Id', 'progressBar', '@countTask');" id="selectMenuButton1 @item.Id">
+                                <select class="form-select b-r-4 b-c-i c" name="status" onchange="this.form.submit(); ChangeDone('flexCheckDefault @item.Id', 'selectMenuButton1 @item.Id', 'textareaTitle @item.Id', 'progressBar', '@countTask');" id="selectMenuButton1 @item.Id">
                                         @{
                                             string select = "";
                                             if (item.Status == TodoItemStatus.Completed)
@@ -297,9 +311,9 @@
                                             }
                                         }
                                     <option value="@item.Status" hidden selected>@select</option>
-                                    <option value="@TodoItemStatus.Completed">Completed</option>
-                                    <option value="@TodoItemStatus.InProgress">In Progress</option>
-                                    <option value="@TodoItemStatus.NotStarted">Not Started</option>
+                                    <option class="c-b" value="@TodoItemStatus.Completed">Completed</option>
+                                    <option class="c-b" value="@TodoItemStatus.InProgress">In Progress</option>
+                                    <option class="c-b" value="@TodoItemStatus.NotStarted">Not Started</option>
                                 </select>
                             </div>
                         </td>
@@ -325,9 +339,9 @@
         <div class="create-table-main">
             <div>
                 <form method="post">
-                    <button class="btn item-buttons-settings-table-main" type="submit" style="display: flex;" value=" Send" asp-controller="Home" asp-action="AddItem">
+                    <button id="createNew" class="btn item-buttons-settings-table-main" type="submit" style="display: flex;" value=" Send" asp-controller="Home" asp-action="AddItem">
                         <div style="padding-right: 5px; padding-top: 1px;">
-                            <span class="material-symbols-outlined " style="font-size: 19px;">
+                            <span class="material-symbols-outlined " style="font-size: 19px;" id="addCircle2">
                                 add_circle
                             </span>
                         </div>

@@ -115,6 +115,28 @@ namespace todo_aspnetmvc_ui.Controllers
             }
         }
 
+        [Route("/mode/{id}&{user_id}")]
+        public IActionResult ModeChange(int id, int user_id)
+        {
+            using (var db = new BL())
+            {
+                var user = db.FindUser(user_id);
+
+                if (user.Mode)
+                {
+                    user.Mode = false;
+                }
+                else
+                {
+                    user.Mode = true;
+                }
+
+                db.UpdateUser(MapperList.Map<UserBL>(user));
+
+                return Redirect($"/{id}");
+            }
+        }
+
         [Route("/{id?}")]
         public IActionResult Index(int id = 0)
         {
@@ -141,7 +163,8 @@ namespace todo_aspnetmvc_ui.Controllers
                 {
                     Id = user.Id,
                     Name = user.Name,
-                    Email = user.Email
+                    Email = user.Email,
+                    Mode = user.Mode
                 };
 
                 IndexViewModel model = new IndexViewModel()
@@ -273,10 +296,31 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             using (var db = new BL())
             {
-                int number = db.GetTodoItems()
-                    .Where(x => x.ToDoListId == id)
-                    .Count(x => x.Title.Contains("Template"));
-                number++;
+                int number = 0;
+                if (id != 0)
+                {
+                    number = db.GetTodoItems()
+                        .Where(x => x.ToDoListId == id)
+                        .Count(x => x.Title.Contains("Template"));
+                    number++;
+                }
+                else
+                {
+                    var user = MapperUser.Map<UserModel>(db.GetUsers()
+                   .FirstOrDefault(x => x.Email == User.Identity.Name));
+
+                    var todoList = new TodoListModel()
+                    {
+                        Title = $"Template1",
+                        Description = $"About todolist \"Template1\".",
+                        IsHidden = false,
+                        UserId = user.Id,
+                    };
+
+                    db.AddTodoList(MapperList.Map<TodoListBL>(todoList));
+                    id = db.GetTodoLists()
+                        .Last(x => x.UserId == user.Id).Id;
+                }
 
                 var todoItem = new TodoItemModel()
                 {

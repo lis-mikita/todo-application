@@ -8,8 +8,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using todo_aspnetmvc_ui.Models;
 using todo_aspnetmvc_ui.ViewModels;
@@ -22,18 +24,14 @@ namespace todo_aspnetmvc_ui.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
         private Mapper MapperList { get; }
 
         private Mapper MapperItem { get; }
 
         private Mapper MapperUser { get; }
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController()
         {
-            _logger = logger;
-
             var configList = new MapperConfiguration(cfg =>
                 cfg.CreateMap<TodoListBL, TodoListModel>().ReverseMap());
             MapperList = new Mapper(configList);
@@ -45,96 +43,6 @@ namespace todo_aspnetmvc_ui.Controllers
             var configUser = new MapperConfiguration(cfg =>
                 cfg.CreateMap<UserBL, UserModel>().ReverseMap());
             MapperUser = new Mapper(configUser);
-        }
-
-        public void ChangeList(int id, string title, string description)
-        {
-            using (var db = new BL())
-            {
-                var todoList = MapperList.Map<TodoListModel>(db.FindTodoList(id));
-
-                if (title != todoList.Title && title != null)
-                {
-                    todoList.Title = title;
-                }
-                else if (description != todoList.Description && description != null)
-                {
-                    todoList.Description = description;
-                }
-
-                db.UpdateTodoList(MapperList.Map<TodoListBL>(todoList));
-            }
-        }
-
-        public void ChangeItem(int id, string title, string description, DateTime datetime, todo_aspnetmvc_ui.Models.TodoItemStatus status)
-        {
-            using (var db = new BL())
-            {
-                var todoItem = MapperItem.Map<TodoItemModel>(db.FindTodoItem(id));
-
-                if (title != todoItem.Title && title != null)
-                {
-                    todoItem.Title = title;
-                }
-                else if (description != todoItem.Description && description != null)
-                {
-                    todoItem.Description = description;
-                }
-                else if (datetime != todoItem.DuetoDateTime)
-                {
-                    todoItem.DuetoDateTime = datetime;
-                }
-                else if (status != todoItem.Status)
-                {
-                    todoItem.Status = status;
-                }
-
-                db.UpdateTodoItem(MapperItem.Map<TodoItemBL>(todoItem));
-            }
-        }
-
-        [Route("/hidden/{id}")]
-        public IActionResult HiddenList(int id)
-        {
-            using (var db = new BL())
-            {
-                var todoList = db.FindTodoList(id);
-                
-                if (todoList.IsHidden)
-                {
-                    todoList.IsHidden = false;
-                }
-                else
-                {
-                    todoList.IsHidden = true;
-                }
-
-                db.UpdateTodoList(MapperList.Map<TodoListBL>(todoList));
-
-                return Redirect($"/{id}");
-            }
-        }
-
-        [Route("/mode/{id}&{user_id}")]
-        public IActionResult ModeChange(int id, int user_id)
-        {
-            using (var db = new BL())
-            {
-                var user = db.FindUser(user_id);
-
-                if (user.Mode)
-                {
-                    user.Mode = false;
-                }
-                else
-                {
-                    user.Mode = true;
-                }
-
-                db.UpdateUser(MapperList.Map<UserBL>(user));
-
-                return Redirect($"/{id}");
-            }
         }
 
         [Route("/{id?}")]
@@ -246,10 +154,23 @@ namespace todo_aspnetmvc_ui.Controllers
                         break;
                 }
 
+                var user = MapperUser.Map<UserModel>(db.GetUsers()
+                    .FirstOrDefault(x => x.Email == User.Identity.Name));
+
+                var userIndex = new UserIndexModel()
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    Mode = user.Mode
+                };
+
                 IndexViewModel ivm = new IndexViewModel()
                 {
-                    TodoLists = MapperList.Map<List<TodoListModel>>(db.GetTodoLists()),
-                    TodoItems = todoItems
+                    TodoLists = MapperList.Map<List<TodoListModel>>(db.GetTodoLists()
+                        .Where(x => x.UserId == user.Id)),
+                    TodoItems = todoItems,
+                    User = userIndex
                 };
 
                 ViewBag.Id = id;
@@ -257,9 +178,94 @@ namespace todo_aspnetmvc_ui.Controllers
                 ViewBag.Group = groupBy;
                 ViewBag.Filter = filterBy;
 
-                return View(ivm);
+                return View("Index", ivm);
             }
+        }
 
+        public void ChangeList(int id, string title, string description)
+        {
+            using (var db = new BL())
+            {
+                var todoList = MapperList.Map<TodoListModel>(db.FindTodoList(id));
+
+                if (title != todoList.Title && title != null)
+                {
+                    todoList.Title = title;
+                }
+                else if (description != todoList.Description && description != null)
+                {
+                    todoList.Description = description;
+                }
+
+                db.UpdateTodoList(MapperList.Map<TodoListBL>(todoList));
+            }
+        }
+
+        public void ChangeItem(int id, string title, string description, DateTime datetime, todo_aspnetmvc_ui.Models.TodoItemStatus status)
+        {
+            using (var db = new BL())
+            {
+                var todoItem = MapperItem.Map<TodoItemModel>(db.FindTodoItem(id));
+
+                if (title != todoItem.Title && title != null)
+                {
+                    todoItem.Title = title;
+                }
+                else if (description != todoItem.Description && description != null)
+                {
+                    todoItem.Description = description;
+                }
+                else if (datetime != todoItem.DuetoDateTime)
+                {
+                    todoItem.DuetoDateTime = datetime;
+                }
+                else if (status != todoItem.Status)
+                {
+                    todoItem.Status = status;
+                }
+
+                db.UpdateTodoItem(MapperItem.Map<TodoItemBL>(todoItem));
+            }
+        }
+
+        public void HiddenList(int id)
+        {
+            using (var db = new BL())
+            {
+                var todoList = db.FindTodoList(id);
+                
+                if (todoList.IsHidden)
+                {
+                    todoList.IsHidden = false;
+                }
+                else
+                {
+                    todoList.IsHidden = true;
+                }
+
+                db.UpdateTodoList(MapperList.Map<TodoListBL>(todoList));
+            }
+        }
+
+        public void ModeChange()
+        {
+            using (var db = new BL())
+            {
+                int user_id = db.GetUsers()
+                    .FirstOrDefault(x => x.Email == User.Identity.Name).Id;
+                var user = db.FindUser(user_id);
+
+                if (user.Mode)
+                {
+                    user.Mode = false;
+                }
+                else
+                {
+                    user.Mode = true;
+                }
+
+                db.UpdateUser(MapperList.Map<UserBL>(user));
+            }
         }
 
         [HttpPost]
@@ -398,11 +404,6 @@ namespace todo_aspnetmvc_ui.Controllers
 
                 return Redirect($"/{idNew}");
             }
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

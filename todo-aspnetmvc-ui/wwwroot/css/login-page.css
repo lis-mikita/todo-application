@@ -63,7 +63,7 @@ a.header {
     gap: 40px;
     position: absolute;
     width: 556px;
-    height: 435px;
+    height: 600px;
     left: 132px;
     top: 232px;
 }
@@ -76,7 +76,7 @@ a.header {
     padding: 0px;
     gap: 16px;
     width: 556px;
-    height: 435px;
+    height: 100%;
     flex: none;
     order: 0;
     align-self: stretch;
@@ -91,7 +91,7 @@ a.header {
     padding: 0px;
     gap: 16px;
     width: 556px;
-    height: 391px;
+    height: 93%;
     flex: none;
     order: 0;
     align-self: stretch;
@@ -325,7 +325,7 @@ p.sign-form {
     padding: 0px;
     gap: 8px;
     width: 556px;
-    height: 28px;
+    height: 7%;
     flex: none;
     order: 1;
     align-self: stretch;

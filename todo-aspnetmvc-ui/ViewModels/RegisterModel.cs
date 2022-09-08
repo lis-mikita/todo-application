@@ -4,7 +4,7 @@ namespace todo_aspnetmvc_ui.ViewModels
 {
     public class RegisterModel
     {
-        [MinLength(3)]
+        [MinLength(1)]
         [MaxLength(50)]
         [Required(ErrorMessage = "Min length for name is 3 symbols")]
         public string Name { get; set; }

@@ -117,11 +117,10 @@ p.title {
 .form-data {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: flex-start;
     padding: 0px;
     gap: 24px;
-    width: 244px;
+    width: 436px;
     height: 488px;
     flex: none;
     order: 1;
@@ -133,10 +132,9 @@ p.title {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     padding: 0px;
     gap: 16px;
-    width: 244px;
+    width: 426px;
     height: 368px;
     flex: none;
     order: 0;
@@ -150,7 +148,7 @@ p.title {
     align-items: flex-start;
     padding: 0px;
     gap: 8px;
-    width: 244px;
+    width: 426px;
     height: 69px;
     flex: none;
     order: 0;

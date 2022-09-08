@@ -20,12 +20,13 @@
                     <div class="sign-data">
                         <div class="form-gr">
                             <label class="form-gr" asp-for="Email">Email</label>
-                            <input class="form-gr" type="text" asp-for="Email" />
+                            <input class="form-gr" type="email" asp-for="Email" required pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$" 
+                                   title="Example email: example@example.com" />
                             <span asp-validation-for="Email" />
                         </div>
                         <div class="form-gr">
                             <label class="form-gr" asp-for="Password">Password</label>
-                            <input class="form-gr" asp-for="Password" />
+                            <input class="form-gr" type="password" asp-for="Password" required />
                             <span asp-validation-for="Password" />
                         </div>
                         <div class="remember">

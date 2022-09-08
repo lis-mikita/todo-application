@@ -49,7 +49,7 @@ namespace todo_aspnetmvc_ui.Controllers
                 model.Email = Request.Cookies["Email"].ToString();
                 model.Password = Request.Cookies["Password"].ToString();
             }
-            else
+            else if (model.Email != null && model.Password != null)
             {
                 CookieOptions cookieOptions = new CookieOptions();
                 Response.Cookies.Append("Email", model.Email);
@@ -67,6 +67,10 @@ namespace todo_aspnetmvc_ui.Controllers
                     Response.Cookies.Delete("Email", cookieOptions);
                     Response.Cookies.Delete("Password", cookieOptions);
                 }
+            }
+            else
+            {
+                // Not use
             }
 
             using (var db = new BL())

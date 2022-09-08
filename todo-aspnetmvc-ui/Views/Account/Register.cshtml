@@ -9,7 +9,7 @@
         <a class="header" href="/Account/Register">TODOCKER</a>
     </div>
     <div class="sign-up">
-        <div class="content">
+        <div class="form">
             <div class="title">
                 <h3 class="title">Sign Up</h3>
                 <p class="title">Create your account</p>
@@ -19,22 +19,25 @@
                 <div class="input-data">
                     <div class="form-gr">
                         <label class="form-gr" asp-for="Name">Name</label>
-                        <input class="form-gr" type="text" asp-for="Name" />
+                        <input class="form-gr" type="text" asp-for="Name" required minlength="1" maxlength="50"/>
                         <span asp-validation-for="Name" />
                     </div>
                     <div class="form-gr">
                         <label class="form-gr" asp-for="Email">Email</label>
-                        <input class="form-gr" type="text" asp-for="Email" />
+                        <input class="form-gr" type="email" asp-for="Email" required pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$"
+                               title="Example email: example@example.com" />
                         <span asp-validation-for="Email" />
                     </div>
                     <div class="form-gr">
                         <label class="form-gr" asp-for="Password">Password</label>
-                        <input class="form-gr" type="text" asp-for="Password" />
+                        <input class="form-gr" type="password" asp-for="Password" id="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                   title="Must contain at least one  number and one uppercase and lowercase letter, and at least 8 or more characters"/>
                         <span asp-validation-for="Password" />
                     </div>
                     <div class="form-gr">
                         <label class="form-gr" asp-for="ConfirmPassword">Confirm Password</label>
-                        <input class="form-gr" type="text" asp-for="ConfirmPassword" />
+                        <input class="form-gr" type="password" asp-for="ConfirmPassword" required id="confirm_password" onchange='check_pass();'
+                               title="Repeat password" />
                         <span asp-validation-for="ConfirmPassword" />
                     </div>
                     <div class="agree">
@@ -42,7 +45,7 @@
                         <p class="agree">I agree with the terms of use</p>
                     </div>
                 </div>
-                <button class="btn form-data" type="submit">
+                <button class="btn form-data" type="submit" id="submit" >
                     <p class="form-data">Sign Up</p>
                 </button>
                 <div class="login">

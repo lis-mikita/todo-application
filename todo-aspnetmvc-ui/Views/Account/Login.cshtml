@@ -1,8 +1,5 @@
-﻿@model todo_aspnetmvc_ui.ViewModels.LoginModel
-
-@{
-    Layout = "_LayoutLogin";
-}
+﻿
+@model LoginModel
 
 <div class="login">
     <div class="header">
@@ -55,3 +52,7 @@
         <img class="img-login-page" src="~/media/side-account.jpg" />
     </figure>
 </div>
+
+@section Style {
+    <link rel="stylesheet" href="~/css/login-page.css" />
+}

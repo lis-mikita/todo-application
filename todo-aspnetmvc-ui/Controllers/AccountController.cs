@@ -13,6 +13,8 @@ using AutoMapper;
 using todo_domain_entities.EntitiesBL;
 using todo_aspnetmvc_ui.ViewModels;
 using System;
+using Microsoft.Net.Http.Headers;
+using todo_aspnetmvc_ui.Contexts;
 
 namespace todo_aspnetmvc_ui.Controllers
 {
@@ -29,12 +31,18 @@ namespace todo_aspnetmvc_ui.Controllers
         [HttpGet]
         public async Task<IActionResult> Login()
         {
+
             if (Request.Cookies["Email"] != null && Request.Cookies["Password"] != null)
             {
                 LoginModel model = new LoginModel();
                 model.Email = Request.Cookies["Email"].ToString();
                 model.Password = Request.Cookies["Password"].ToString();
                 return await Login(model);
+            }
+
+            if (new TypeBrowser(HttpContext).IsMobileDeviceBrowser())
+            {
+                return View("Login.Mobile");
             }
 
             return View();
@@ -86,6 +94,12 @@ namespace todo_aspnetmvc_ui.Controllers
                     }
                     ModelState.AddModelError("", "Login and(or) password is incorrect");
                 }
+
+                if (new TypeBrowser(HttpContext).IsMobileDeviceBrowser())
+                {
+                    return View("Login.Mobile", model);
+                }
+
                 return View(model);
             }
         }
@@ -93,6 +107,11 @@ namespace todo_aspnetmvc_ui.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            if (new TypeBrowser(HttpContext).IsMobileDeviceBrowser())
+            {
+                return View("Register.Mobile");
+            }
+
             return View();
         }
 
@@ -124,6 +143,12 @@ namespace todo_aspnetmvc_ui.Controllers
                     else
                         ModelState.AddModelError("", "Login and(or) password is incorrect");
                 }
+
+                if (new TypeBrowser(HttpContext).IsMobileDeviceBrowser())
+                {
+                    return View("Register.Mobile", model);
+                }
+
                 return View(model);
             }
         }
@@ -151,6 +176,7 @@ namespace todo_aspnetmvc_ui.Controllers
             Response.Cookies.Delete("Password", cookieOptions);
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
             return RedirectToAction("Login", "Account");
         }
     }

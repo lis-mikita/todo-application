@@ -1,15 +1,20 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using todo_aspnetmvc_ui.Contexts;
 using todo_domain_entities.EF;
 
 namespace todo_aspnetmvc_ui
@@ -57,8 +62,26 @@ namespace todo_aspnetmvc_ui
             app.UseAuthentication();
             app.UseAuthorization();
 
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapGet("", async httpContext =>
+            //    {
+            //        if (new TypeBrowser(httpContext).IsMobileDeviceBrowser())
+            //        {
+            //            httpContext.Response.Redirect("/Mobile", permanent: false);
+            //            //WriteAsync("Is Mobile Browser ");
+            //            ;
+            //        }
+            //        else
+            //        {
+            //            httpContext.Response.Redirect("/");
+            //        }
+            //    });
+
+            //});
+
             app.UseEndpoints(endpoints =>
-            {
+            {   
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

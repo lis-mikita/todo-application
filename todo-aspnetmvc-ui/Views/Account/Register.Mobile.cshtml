@@ -1,0 +1,78 @@
+﻿
+@model RegisterModel
+
+<div class="register">
+    <div class="header">
+        <a class="header" href="/Account/Register">TODOCKER</a>
+    </div>
+    <div class="sign-up">
+        <div class="form">
+            <div class="title">
+                <h3 class="title">Sign Up</h3>
+                <p class="title">Create your account</p>
+            </div>
+            <form class="form-data" asp-action="Register" asp-controller="Account" asp-anti-forgery="true">
+                <div class="validation" asp-validation-summary="ModelOnly"></div>
+                <div class="input-data">
+                    <div class="form-gr">
+                        <label class="form-gr" asp-for="Name">Name</label>
+                        <input class="form-gr" type="text" asp-for="Name" required minlength="1" maxlength="50"/>
+                        <span asp-validation-for="Name" />
+                    </div>
+                    <div class="form-gr">
+                        <label class="form-gr" asp-for="Email">Email</label>
+                        <input class="form-gr" type="email" asp-for="Email" required pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$"
+                               title="Example email: example@example.com" />
+                        <span asp-validation-for="Email" />
+                    </div>
+                    <div class="form-gr">
+                        <label class="form-gr" asp-for="Password">Password</label>
+                        <input class="form-gr" type="password" asp-for="Password" id="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                   title="Must contain at least one  number and one uppercase and lowercase letter, and at least 8 or more characters"/>
+                        <span asp-validation-for="Password" />
+                    </div>
+                    <div class="form-gr">
+                        <label class="form-gr" asp-for="ConfirmPassword">Confirm Password</label>
+                        <input class="form-gr" type="password" asp-for="ConfirmPassword" required id="confirm_password" onchange='check_pass();'
+                               title="Repeat password" />
+                        <span asp-validation-for="ConfirmPassword" />
+                    </div>
+                    <div class="agree">
+                        <input class="agree" type="checkbox" />
+                        <p class="agree">I agree with the terms of use</p>
+                    </div>
+                </div>
+                <button class="btn form-data" type="submit" id="submit" >
+                    <p class="form-data">Sign Up</p>
+                </button>
+                <div class="login">
+                    <p class="login">Already have an Account</p>
+                    <a class="login" href="/Account/Login">Sign in</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Style {
+    <link rel="stylesheet" href="~/css/register-page-mobile.css" />
+}
+
+@section Scripts {
+    <script>
+        function check_pass() {
+            const confirmPassword = document.getElementById('confirm_password');
+            confirmPassword.addEventListener("input", (event) => {
+                if (document.getElementById('password').value ==
+                    document.getElementById('confirm_password').value) {
+                    document.getElementById('submit').disabled = false;
+                }
+                else {
+                    document.getElementById('submit').disabled = true;
+                    confirmPassword.setCustomValidity("Repeat password");
+                    confirmPassword.reportValidity();
+                }
+            });
+        }
+    </script>
+}

@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contexts\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Migrations\" />
     <Folder Include="Services\" />

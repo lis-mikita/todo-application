@@ -3,55 +3,56 @@
     font-family: 'Lato', sans-serif;
 }
 
-.login {
-    position: absolute;
-    width: 67.5%;
-    height: 100%;
-    left: 0px;
+.register {
     top: 0px;
-}
-
-.img-login-page {
     position: absolute;
-    width: 32.5%;
-    height: 100%;
-    left: 67.5%;
-    top: 0px;
-    z-index: -1;
-}
-
-figure.img-login-page, img.img-login-page {
-    height: 100%;
     width: 100%;
-    left: 0px;
+    height: 100%;
+    max-width: 400px;
 }
 
 .header {
     display: flex;
     flex-direction: row;
+    justify-content: flex-end;
     align-items: center;
     padding: 0px;
     gap: 8px;
     position: absolute;
-    width: 207px;
+    width: 95%;
     height: 23px;
-    left: 132px;
-    top: 72px;
+    top: 5%;
+    left: 5%;
+    z-index: 1;
 }
 
 a.header {
+    left: auto;
+    right: 5%;
     width: 207px;
     height: 23px;
     font-style: normal;
     font-weight: 700;
     font-size: 36px;
     line-height: 23px;
-    left: 0px;
     top: 0px;
     color: #232D42;
     flex: none;
     order: 0;
     flex-grow: 0;
+}
+
+.sign-up {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 85px 0px;
+    gap: 10px;
+    position: absolute;
+    width: 90%;
+    height: 100%;
+    left: 5%;
+    top: 5%;
 }
 
 .form {
@@ -60,61 +61,33 @@ a.header {
     justify-content: center;
     align-items: flex-start;
     padding: 0px;
-    gap: 40px;
-    position: absolute;
-    width: 556px;
-    height: 600px;
-    left: 132px;
-    top: 232px;
-}
-
-.content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0px;
-    gap: 16px;
-    width: 556px;
+    gap: 10px;
+    width: 100%;
     height: 100%;
+    /* Inside auto layout */
+
     flex: none;
     order: 0;
-    align-self: stretch;
     flex-grow: 0;
 }
 
-.sign-in-form {
+.title {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0px;
-    gap: 16px;
-    width: 556px;
-    height: 93%;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
-}
-
-.sign-in-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: flex-start;
     padding: 0px;
-    gap: 16px;
-    width: 556px;
-    height: 87px;
+    gap: 8px;
+    width: 244px;
+    height: 79px;
+    margin-bottom: 16px;
     flex: none;
     order: 0;
     align-self: stretch;
     flex-grow: 0;
 }
 
-h3.sign-in-text {
-    width: 106px;
+h3.title {
+    width: 123px;
     height: 43px;
     font-style: normal;
     font-weight: 500;
@@ -127,8 +100,8 @@ h3.sign-in-text {
     flex-grow: 0;
 }
 
-p.sign-in-text {
-    width: 187px;
+p.title {
+    width: 154px;
     height: 28px;
     font-style: normal;
     font-weight: 400;
@@ -141,30 +114,31 @@ p.sign-in-text {
     flex-grow: 0;
 }
 
-.sign-form {
+.form-data {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 0px;
     gap: 24px;
-    width: 556px;
-    height: 288px;
+    width: 95%;
+    height: 100%;
     flex: none;
     order: 1;
     align-self: stretch;
     flex-grow: 0;
 }
 
-.sign-data {
+.input-data {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    justify-content: center;
     padding: 0px;
     gap: 16px;
-    width: 436px;
-    height: 220px;
+    width: 100%;
+    height: 368px;
     flex: none;
     order: 0;
+    align-self: stretch;
     flex-grow: 0;
 }
 
@@ -173,17 +147,16 @@ p.sign-in-text {
     flex-direction: column;
     align-items: flex-start;
     padding: 0px;
-    gap: 6px;
-    width: 436px;
-    height: 80px;
-    margin: 0px;
+    gap: 8px;
+    width: 100%;
+    height: 69px;
     flex: none;
     order: 0;
+    align-self: stretch;
     flex-grow: 0;
 }
 
 label.form-gr {
-    width: 40px;
     height: 28px;
     font-style: normal;
     font-weight: 400;
@@ -194,25 +167,72 @@ label.form-gr {
     flex: none;
     order: 0;
     flex-grow: 0;
+    width: 100%;
 }
 
 input.form-gr {
+    box-sizing: border-box;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 16px;
-    width: 436px;
-    height: 44px;
-    border-radius: 4px;
+    flex-direction: row;
+    align-items: center;
+    padding: 6px 16px;
+    gap: 227px;
+    width: 100%;
+    height: 33px;
+    background: #FFFFFF;
     border: 1px solid #8A92A6;
+    border-radius: 4px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.agree {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 8px;
+    width: 244px;
+    height: 28px;
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+input.agree {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    width: 16px;
+    height: 16px;
+    background: #FFFFFF;
+    border: 1px solid #8A92A6;
+    border-radius: 2px;
     flex: none;
     order: 1;
     flex-grow: 0;
 }
 
-button.sign-form {
+p.agree {
+    width: 217px;
+    height: 28px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 175%;
+    margin: 0px;
+    color: #8A92A6;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+button.form-data {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -227,127 +247,75 @@ button.sign-form {
     flex-grow: 0;
 }
 
-.remember {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 166px;
-    width: 436px;
-    height: 28px;
-    flex: none;
-    order: 2;
-    flex-grow: 0;
-}
-
-.check-remember {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px;
-    gap: 8px;
-    width: 142px;
-    height: 28px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-}
-
-input.check-remember {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 0px;
-    width: 16px;
-    height: 16px;
-    background: #FFFFFF;
-    border: 1px solid #8A92A6;
-    box-shadow: 0px 4px 8px rgba(0, 16, 41, 0.1);
-    border-radius: 2px;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-}
-
-p.check-remember {
-    width: 118px;
-    height: 28px;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 175%;
-    margin: 0px;
-    color: #8A92A6;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-}
-
-a.remember {
-    width: 128px;
-    height: 28px;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 175%;
-    color: #017DB7;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-}
-
-p.sign-form {
+p.form-data {
     width: 140px;
     height: 28px;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 175%;
+    margin: 0px;
+    background: #017DB7;
     display: flex;
     align-items: center;
     text-align: center;
     color: #FFFFFF;
-    background: #017DB7;
     flex: none;
     order: 0;
     flex-grow: 0;
 }
 
-.register {
+.login {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    justify-content: left;
+    align-items: center;
     padding: 0px;
-    gap: 8px;
-    width: 556px;
-    height: 7%;
+    gap: 4px;
+    width: 244px;
+    height: 28px;
     flex: none;
-    order: 1;
-    align-self: stretch;
+    order: 2;
     flex-grow: 0;
 }
 
-a.register {
+p.login {
+    width: 180px;
+    margin: 0px;
+    height: 28px;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 175%;
-    width: auto;
+    color: #232D42;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+a.login {
+    width: 46px;
+    height: 28px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 175%;
     color: #017DB7;
     flex: none;
     order: 0;
     flex-grow: 0;
 }
 
-p.register {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 175%;
-    width: auto;
-    color: #232D42;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+.img-register-page {
+    position: absolute;
+    width: 32.5%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    z-index: -1;
+}
+
+figure.img-register-page, img.img-register-page {
+    height: 100%;
+    width: 100%;
 }

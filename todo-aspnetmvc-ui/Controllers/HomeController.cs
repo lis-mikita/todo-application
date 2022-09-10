@@ -83,14 +83,26 @@ namespace todo_aspnetmvc_ui.Controllers
                     User = userIndex
                 };
 
+                var items = MapperItem.Map<List<TodoItemModel>>(db.GetTodoItems());
+
                 IEnumerable<TodoItemModel> m = null;
                 if (firstList != null)
                 {
-                    m = MapperItem.Map<List<TodoItemModel>>(db.GetTodoItems())
-                        .Where(x => x.ToDoListId == model.TodoLists.FirstOrDefault(x => x.Id == id).Id);
+                    m = items.Where(x => x.ToDoListId == model.TodoLists.FirstOrDefault(x => x.Id == id).Id);
                 }
 
                 model.TodoItems = m;
+
+                IEnumerable<TodoListModel> notificationList = new List<TodoListModel>();
+                foreach (var item in model.TodoLists ?? Enumerable.Empty<TodoListModel>())
+                {
+                    if (items.FirstOrDefault(x => x.ToDoListId == item.Id && x.DuetoDateTime.Date == DateTime.Today) != null)
+                    {
+                        notificationList = notificationList.Append(item);
+                    }
+                }
+
+                model.Notifications = notificationList;
 
                 ViewBag.Id = id;
 
@@ -178,6 +190,18 @@ namespace todo_aspnetmvc_ui.Controllers
                     TodoItems = todoItems,
                     User = userIndex
                 };
+
+                var items = MapperItem.Map<List<TodoItemModel>>(db.GetTodoItems());
+                IEnumerable<TodoListModel> notificationList = new List<TodoListModel>();
+                foreach (var item in ivm.TodoLists ?? Enumerable.Empty<TodoListModel>())
+                {
+                    if (items.FirstOrDefault(x => x.ToDoListId == item.Id && x.DuetoDateTime.Date == DateTime.Today) != null)
+                    {
+                        notificationList = notificationList.Append(item);
+                    }
+                }
+
+                ivm.Notifications = notificationList;
 
                 ViewBag.Id = id;
                 ViewBag.Sort = sortBy;

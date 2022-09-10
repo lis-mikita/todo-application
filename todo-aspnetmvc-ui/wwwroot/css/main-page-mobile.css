@@ -2,6 +2,8 @@
     background-color: #F7F7F7;
     font-family: 'Lato', sans-serif;
     font-style: normal;
+    width: 100%;
+    height: 100%;
 }
 
 .b-0 {
@@ -26,6 +28,10 @@
 
 .c-b {
     color: black;
+}
+
+.l-w {
+    font-weight: 700;
 }
 
 #datetime {
@@ -73,13 +79,31 @@
 #header {
     position: fixed;
     background: #FFFFFF;
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
-.container-fluid {
+#container-fluid {
     flex-direction: row;
     padding: 0px;
-    gap: 0px;
     height: 45px;
+    width: 100%;
+    gap: 8px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.menu-btn {
+    width: 20px;
+    height: 20px;
+}
+
+button.menu-btn {
+    padding: 0px;
+    border: 0px;
+    background-color: inherit;
+    vertical-align: text-top;
 }
 
 .links {
@@ -88,7 +112,7 @@
     align-items: center;
     padding: 0px;
     gap: 20px;
-    width: 150px;
+    width: 130px;
     height: 23px;
 }
 
@@ -100,6 +124,8 @@ a.links {
     line-height: 23px;
     /* Main Color Text */
     color: #232D42;
+    width: 130px;
+    margin: 0px;
 }
 
 .control {
@@ -107,9 +133,9 @@ a.links {
     flex-direction: row;
     align-items: center;
     padding: 0px;
-    gap: 16px;
-    width: 338.95px;
     height: 45px;
+    width: 194px;
+    gap: 8px;
 }
 
 .bell {
@@ -134,7 +160,7 @@ button.user {
     background-color: #FFF;
     border: 0px;
     display: flex;
-    gap: 16px;
+    gap: 8px;
     width: 153px;
     height: 45px;
     justify-content: flex-start;
@@ -145,8 +171,8 @@ button.user:hover {
 }
 
 img.user {
-    width: 45px;
-    height: 45px;
+    width: 35px;
+    height: 35px;
     border-radius: 30px;
 }
 
@@ -193,13 +219,14 @@ p.title {
     padding: 0px 23px;
     gap: 16px;
     width: 227px;
-    height: 100%;
     top: 65px;
     left: 0px;
     background: #FFFFFF;
     /* Shadow */
 
     box-shadow: 0px 10px 30px rgba(17, 38, 146, 0.05);
+    overflow: scroll;
+    height: 90%;
 }
 
 .workspace-side-menu {
@@ -500,41 +527,18 @@ span.plus-circle-item-messages-spreadsheets-create {
 
 /*Main*/
 
-.img-main {
-    height: 160px;
-    left: 228px;
-    top: 65px;
-    position: fixed;
-    width: calc(100% - 228px);
-    z-index: -1;
-}
-
-figure {
-    width: 100%;
-    height: 160px;
-    float: left;
-}
-
-figure img {
-        display: unset;
-        margin: unset;
-        width: 100%;
-        height: 160px;
-    }
-
 .main {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 0px;
-    left: 252px;
-    top: 241px;
     position: absolute;
-    min-width: 975px;
-    width: calc(100% - 252px);
     padding-right: 20px;
     padding-bottom: 20px;
     z-index: -2;
+    width: 95%;
+    top: 65px;
+    left: 5%;
 }
 
 .header-main {
@@ -548,7 +552,7 @@ figure img {
 }
 
 .title-header-main {
-    width: 936px;
+    width: 100%;
     height: 66px;
     font-weight: 700;
     font-size: 40px;
@@ -561,7 +565,7 @@ figure img {
 }
 
 .description-header-main {
-    width: 936px;
+    width: 100%;
     height: 35px;
     font-weight: 300;
     font-size: 20px;
@@ -589,22 +593,26 @@ figure img {
     filter: drop-shadow(0px 10px 30px rgba(17, 38, 146, 0.05));
     border-radius: 16px;
     background-color: #FFFFFF;
+    width: 100%
 }
 
 .settings-table-main {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
     align-items: center;
-    padding: 16px 0px 0px 0px;
     gap: 23px;
     width: 100%;
-    height: 47px;
+    height: auto;
     background: #FFFFFF;
     padding-right: 20px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     background-color: inherit;
+    padding: 4px;
+    justify-content: center;
+    position: sticky;
+    top: 65px;
+    z-index: 1;
 }
 
 select.item-buttons-settings-table-main {
@@ -618,6 +626,7 @@ select.item-buttons-settings-table-main {
     /* 8A92A6 Text Color 2 */
     color: #8A92A6;
     background-color: inherit;
+    width: 175px;
 }
 
 button.item-buttons-settings-table-main {
@@ -631,6 +640,7 @@ button.item-buttons-settings-table-main {
 
 #createNew {
     color: #8A92A6;
+    padding: 0px;
 }
 
 
@@ -672,6 +682,24 @@ tr {
 
 #table {
     margin-bottom: 0px;
+    width: 100%
+}
+
+#tbody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#tr {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    align-items: flex-start;
+    width: 100%
+    border-bottom: 2px solid;
+    border-top: 2px solid;
+    border-color: #8A92A6;
 }
 
 .create-table-main {
@@ -691,37 +719,48 @@ tr {
 }
 
 #col-numer {
-    width: 2%;
     padding: 0px;
     padding-left: 1%;
     padding-right: 2%;
+    width: 100%;
+    text-align: left;
+    /* height: 20px; */
+    padding: 5px;
 }
 
 #col-done {
-    width: 5%;
+    width: 100%;
     text-align: left;
-    padding: 0px;
-    padding-right: 2%;
+    padding: 5px;
 }
 
 #col-title {
-    width: 14%;
-    text-align: left;
-    padding: 0px;
     padding-right: 2%;
     background-color: inherit;
+    width: 100%;
+    text-align: left;
+    padding: 5px;
+    height: auto;
+    gap: 91px;
 }
 
 .title-table {
     background-image: linear-gradient(to bottom, transparent calc(50% - 1px), gray, transparent calc(50% + 1px));
 }
 
+/*wfwfw*/
+.table tbody td {
+    display: flex;
+    gap: 16px;
+}
+
 #col-description {
-    width: 24%;
-    text-align: left;
-    padding: 0px;
     padding-right: 2%;
     background-color: inherit;
+    width: 100%;
+    text-align: left;
+    padding: 5px;
+    gap: 33px;
 }
 
 .textarea-table {
@@ -731,32 +770,33 @@ tr {
 }
 
 #col-due-date {
-    width: 12%;
-    text-align: right;
-    padding: 0px;
     padding-right: 2%;
     background-color: inherit;
+    width: 100%;
+    text-align: left;
+    padding: 5px;
+    gap: 54px;
 }
 
 #col-create-date {
-    width: 12%;
-    text-align: right;
-    padding: 0px;
     padding-right: 2%;
+    width: 100%;
+    text-align: left;
+    padding: 5px;
 }
 
 #col-status {
-    width: 12%;
-    text-align: left;
-    padding: 0px;
     padding-right: 1%;
+    width: 100%;
+    text-align: left;
+    padding: 5px;
+    gap: 81px;
 }
 
 #col-dotz {
-    width: 2%;
-    text-align: center;
-    padding: 0px;
-    padding-right: 3%;
+    width: 100%;
+    text-align: left;
+    padding: 5px;
 }
 
 button.col-dotz {

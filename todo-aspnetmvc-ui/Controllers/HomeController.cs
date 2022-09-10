@@ -13,6 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using todo_aspnetmvc_ui.Contexts;
 using todo_aspnetmvc_ui.Models;
 using todo_aspnetmvc_ui.ViewModels;
 using todo_domain_entities;
@@ -92,6 +93,11 @@ namespace todo_aspnetmvc_ui.Controllers
                 model.TodoItems = m;
 
                 ViewBag.Id = id;
+
+                if (new TypeBrowser(HttpContext).IsMobileDeviceBrowser())
+                {
+                    return View("Index.Mobile", model);
+                }
 
                 return View(model);
             }
@@ -177,6 +183,11 @@ namespace todo_aspnetmvc_ui.Controllers
                 ViewBag.Sort = sortBy;
                 ViewBag.Group = groupBy;
                 ViewBag.Filter = filterBy;
+
+                if (new TypeBrowser(HttpContext).IsMobileDeviceBrowser())
+                {
+                    return View("Index.Mobile", ivm);
+                }
 
                 return View("Index", ivm);
             }

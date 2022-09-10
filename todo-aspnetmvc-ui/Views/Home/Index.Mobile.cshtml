@@ -1,26 +1,37 @@
-﻿
-@model IndexViewModel
+﻿@model IndexViewModel
 
 <!--Header-->
 <nav class="navbar navbar-light header" id="header">
-        <div class="container-fluid">
-            <div class="links">
-                <a class="navbar-brand links" href="/" id="headerA">TODOCKER</a>
-            </div>
-            <div class="control">
-                <div class="custom-control custom-switch">
-                    @{
+    <div class="container-fluid" id="container-fluid">
+        <div class="menu-btn">
+            <button class="menu-btn" type="button" data-bs-toggle="collapse" data-bs-target="#sideMenu" aria-expanded="true" aria-controls="sideMenu">
+                <span class="material-symbols-outlined" id="menu-btn">
+                    menu
+                </span>
+            </button>
+        </div>
+        <div class="links">
+            <a class="navbar-brand links" href="/" id="headerA">TODOCKER</a>
+        </div>
+        <div class="control">
+            <div class="custom-control custom-switch" style="display: flex;">
+                @{
                     string mode = "";
+                    string modeSpan = "light_mode";
                     if (Model.User.Mode)
                     {
                         mode = "checked";
+                        modeSpan = "dark_mode";
                     }
                 }
                 <input type="checkbox" class="custom-control-input" id="customSwitch1" onchange="ChangeStyle();" onclick="ChangeMode();" @mode>
-                <label class="custom-control-label" for="customSwitch1" id="labelCustomSwitch1">Light Mode</label>
+                <label class="custom-control-label" for="customSwitch1" id="labelCustomSwitch1"></label>
+                <span class="material-symbols-outlined" id="modeSpan">
+                    @modeSpan
+                </span>
                 <a asp-action="ModeChange" target="ModeChange" id="mode" hidden></a>
             </div>
-            <div class="bell">
+            <div class="bell" hidden>
                 <span class="material-symbols-outlined">
                     notifications
                 </span>
@@ -43,7 +54,7 @@
 </nav>
 
 <!--Side menu-->
-<div class="side-menu" id="sideMenu">
+<div class="side-menu collapse" id="sideMenu">
     <div class="workspace-side-menu">
         <div class="title-workspace-side-menu">
             <div class="header-title-workspace-side-menu">
@@ -139,13 +150,6 @@
     </div>
 </div>
 
-<!--Main image-->
-<div class="img-main">
-    <figure>
-        <img src="media/rectangle-main.jpg" />
-    </figure>
-</div>
-
 <!--Main page-->
 <div class="main">
     <div class="header-main">
@@ -196,81 +200,80 @@
     </div>
     <div class="table-main" id="tableMain">
         <div class="settings-table-main">
-            <div>
-                <form method="post">
-                    <button id="createNew" class="btn item-buttons-settings-table-main" type="submit" style="display: flex;" value=" Send" asp-controller="Home" asp-action="AddItem">
-                        <div style="padding-right: 5px; padding-top: 1px;">
-                            <span class="material-symbols-outlined " style="font-size: 19px;" id="addCircle1">
-                                add_circle
-                            </span>
-                        </div>
-                        Create new
-                    </button>
-                    <input type="hidden" name="id" value="@ViewBag.Id" />
-                </form>
-            </div>
-            <div style="display: contents;">
-                <form method="get" asp-controller="Home" asp-action="Filter" style="display: contents;">
-                    @{
-                        if (ViewBag.Sort == null)
-                        {
-                            ViewBag.Sort = "order";
-                            ViewBag.Group = "groupBy";
-                            ViewBag.Filter = "all";
-                        }
-                    }
+            <button class="btn collapsed" style="color: #8A92A6; border: 1px solid;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAction" aria-expanded="false" aria-controls="collapseAction">
+                Action
+            </button>
+            <div class="collapse" id="collapseAction" style="">
+                <div class="card card-body">
                     <div>
-                        <select class="form-select item-buttons-settings-table-main b-0" name="sortBy" onchange="this.form.submit();" id="sortBy">
-                            <option value="@ViewBag.Sort" hidden selected>Sort By: @ViewBag.Sort</option>
-                            <option value="order">Sort By: order</option>
-                            <option value="title">Sort By: title</option>
-                            <option value="description">Sort By: description</option>
-                            <option value="duedate">Sort By: due date</option>
-                            <option value="createdate">Sort By: creation date</option>
-                            <option value="status">Sort By: status</option>
-                        </select>
+                        <form method="post">
+                            <button id="createNew" class="btn item-buttons-settings-table-main" type="submit" style="display: flex;" value=" Send" asp-controller="Home" asp-action="AddItem">
+                                <div style="padding-right: 5px; padding-top: 1px;">
+                                    <span class="material-symbols-outlined " style="font-size: 19px;" id="addCircle1">
+                                        add_circle
+                                    </span>
+                                </div>
+                                Create new
+                            </button>
+                            <input type="hidden" name="id" value="@ViewBag.Id" />
+                        </form>
                     </div>
-                    <div>
-                        <select class="form-select item-buttons-settings-table-main b-0" name="groupBy" onchange="this.form.submit();" id="groupBy">
-                            <option value="@ViewBag.Group" hidden selected>Group By: @ViewBag.Group</option>
-                        </select>
+                    <div style="display: contents;">
+                        <form method="get" asp-controller="Home" asp-action="Filter" style="display: contents;">
+                            @{
+                                if (ViewBag.Sort == null)
+                                {
+                                    ViewBag.Sort = "order";
+                                    ViewBag.Group = "groupBy";
+                                    ViewBag.Filter = "all";
+                                }
+                            }
+                            <div>
+                                <select class="form-select item-buttons-settings-table-main b-0" name="sortBy" onchange="this.form.submit();" id="sortBy">
+                                    <option value="@ViewBag.Sort" hidden selected>Sort By: @ViewBag.Sort</option>
+                                    <option value="order">Sort By: order</option>
+                                    <option value="title">Sort By: title</option>
+                                    <option value="description">Sort By: description</option>
+                                    <option value="duedate">Sort By: due date</option>
+                                    <option value="createdate">Sort By: creation date</option>
+                                    <option value="status">Sort By: status</option>
+                                </select>
+                            </div>
+                            <div>
+                                <select class="form-select item-buttons-settings-table-main b-0" name="groupBy" onchange="this.form.submit();" id="groupBy">
+                                    <option value="@ViewBag.Group" hidden selected>Group By: @ViewBag.Group</option>
+                                </select>
+                            </div>
+                            <div>
+                                <select class="form-select item-buttons-settings-table-main b-0" name="filterBy" onchange="this.form.submit();" id="filterBy">
+                                    <option value="@ViewBag.Filter" hidden selected>Filter By: @ViewBag.Filter</option>
+                                    <option value="all">Filter By: all</option>
+                                    <option value="completed">Filter By: completed</option>
+                                    <option value="inProgress">Filter By: in progress</option>
+                                    <option value="notStarted">Filter By: not started</option>
+                                </select>
+                            </div>
+                            <input type="number" value="@ViewBag.Id" name="id" hidden />
+                        </form>
                     </div>
-                    <div>
-                        <select class="form-select item-buttons-settings-table-main b-0" name="filterBy" onchange="this.form.submit();" id="filterBy">
-                            <option value="@ViewBag.Filter" hidden selected>Filter By: @ViewBag.Filter</option>
-                            <option value="all">Filter By: all</option>
-                            <option value="completed">Filter By: completed</option>
-                            <option value="inProgress">Filter By: in progress</option>
-                            <option value="notStarted">Filter By: not started</option>
-                        </select>
-                    </div>
-                    <input type="number" value="@ViewBag.Id" name="id" hidden />
-                </form>
+                </div>
             </div>
         </div>
         <table class="table border-top border-bottom" id="table">
-            <thead>
-                <tr>
-                    <th scope="col" id="col-numer"></th>
-                    <th scope="col" id="col-done">Done</th>
-                    <th scope="col" id="col-title">Title</th>
-                    <th scope="col" id="col-description">Description</th>
-                    <th scope="col" id="col-due-date">Due Date</th>
-                    <th scope="col" id="col-create-date">Creation Date</th>
-                    <th scope="col" id="col-status">Status</th>
-                    <th scope="col" id="col-dotz"></th>
-                </tr>
-            </thead>
-            <tbody>
+            <tbody id="tbody">
                 @{
                     int i = 1;
                 }
                 @foreach (var item in Model.TodoItems ?? Enumerable.Empty<TodoItemModel>())
                 {
-                    <tr>
-                        <td id="col-numer" class="c" scope="row">@i</td>
+                    <tr id="tr">
+                        <td id="col-numer" class="c" scope="row">
+                            <label>№ </label>
+                            @i
+                        </td>
                         <form method="post" asp-controller="Home" asp-action="ChangeItem" target="ChangeItem">
                         <td id="col-done">
+                            <label class="l-w">Done:</label>
                             <div class="form-check checkbox-table-main">
                                     @{
                                         string check = "";
@@ -284,6 +287,7 @@
                             </div>
                         </td>
                         <td id="col-title">
+                            <label class="l-w">Title:</label>
                                 @{
                                     string styleClass = "";
                                     if (item.Status == TodoItemStatus.Completed)
@@ -294,13 +298,19 @@
                             <textarea name="title" class="b-0 c b-c-i textarea-table @styleClass" onchange="this.form.submit()" id="textareaTitle @item.Id">@item.Title</textarea>
                         </td>
                         <td id="col-description">
+                            <label class="l-w">Description:</label>
                             <textarea name="description" class="b-0 c b-c-i textarea-table" style="width: 100%;" onchange="this.form.submit()">@item.Description</textarea>
                         </td>
                         <td id="col-due-date">
+                            <label class="l-w">Due Date:</label>
                             <input type="date" class="b-c-i c" data-date="" data-date-format="DD MMMM YYYY" value="@item.DuetoDateTime.ToString("yyyy-MM-dd")" id="datetime" name="datetime" onchange="this.form.submit()">
                         </td>
-                        <td id="col-create-date" class="c">@item.CreatedDate.ToString("dd MMMM yyyy")</td>
+                        <td id="col-create-date" class="c">
+                            <label class="l-w">Creation Date:</label>
+                                @item.CreatedDate.ToString("dd MMMM yyyy")
+                        </td>
                         <td id="col-status">
+                            <label class="l-w">Status:</label>
                             <div class="form-floating select">
                                 <select class="form-select b-r-4 b-c-i c status-progress" name="status" onchange="this.form.submit(); ChangeDone('flexCheckDefault @item.Id', 'selectMenuButton1 @item.Id', 'textareaTitle @item.Id', 'progressBar', '@countTask');" id="selectMenuButton1 @item.Id">
                                         @{
@@ -367,11 +377,11 @@
 </div>
 
 @section Style {
-    <link rel="stylesheet" href="~/css/main-page.css" />
+    <link rel="stylesheet" href="~/css/main-page-mobile.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 }
 
-@section Scripts {
+    @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script>
         function ChangeTitleTodoList(idLable, idInput) {
@@ -491,14 +501,14 @@
         function ChangeStyle() {
 
             let checkBox = document.getElementById('customSwitch1');
-            let label = document.getElementById('labelCustomSwitch1');
+            let menuBtn = document.getElementById('menu-btn');
 
             let bgColor = "#222738";
             let myBody = document.getElementById('my-body');
             let header = document.getElementById('header');
             let dropdownListUser = document.getElementById('dropdownListUser');
             let headerA = document.getElementById('headerA');
-            let labelCustomSwitch1 = document.getElementById('labelCustomSwitch1');
+            let modeSpan = document.getElementById('modeSpan');
             let headerName = document.getElementById('headerName');
 
             let listTitle = document.getElementById('listTitle');
@@ -512,6 +522,7 @@
             let colDueDate = document.getElementById('col-due-date');
             let colCreateDate = document.getElementById('col-create-date');
             let colStatus = document.getElementById('col-status');
+            let lables = document.getElementsByClassName('l-w');
 
             let sideMenu = document.getElementById('sideMenu');
             let c = document.getElementsByClassName('c');
@@ -519,13 +530,14 @@
             let cB = document.getElementsByClassName('c-b');
 
             if (checkBox.checked == true) {
-                label.innerText = "Dark Mode";
+                modeSpan.innerText = "dark_mode";
+                menuBtn.style.color = "#FFFFFF";
                 myBody.style.backgroundColor = "#222738";
                 header.style.backgroundColor = "#30384F";
                 header.style.borderColor = "#30384F";
                 dropdownListUser.style.backgroundColor = "#30384F";
                 headerA.style.color = "#FFFFFF";
-                labelCustomSwitch1.style.color = "#FFFFFF";
+                modeSpan.style.color = "#FFFFFF";
                 headerName.style.color = "#FFFFFF";
 
                 listTitle.style.backgroundColor = "#222738";
@@ -548,6 +560,9 @@
                 for (i = 0; i < cB.length; i++) {
                     cB[i].style.color = "#232D42";
                 }
+                for (i = 0; i < lables.length; i++) {
+                    lables[i].style.color = "#FFFFFF";
+                }
 
                 sideMenu.style.backgroundColor = "#30384F";
                 sideMenu.style.color = "#FFFFFF";
@@ -556,13 +571,14 @@
                 }
             }
             else {
-                label.innerText = "Light Mode";
+                modeSpan.innerText = "light_mode";
+                menuBtn.style.color = "#232D42";
                 myBody.style.backgroundColor = "#F7F7F7";
                 header.style.backgroundColor = "#FFFFFF";
                 header.style.borderColor = "#E9ECEF";
                 dropdownListUser.style.backgroundColor = "#FFF";
                 headerA.style.color = "#232D42";
-                labelCustomSwitch1.style.color = "#232D42";
+                modeSpan.style.color = "#232D42";
                 headerName.style.color = "#232D42";
 
                 listTitle.style.backgroundColor = "#F7F7F7";
@@ -584,6 +600,9 @@
                 }
                 for (i = 0; i < cB.length; i++) {
                     cB[i].style.color = "#232D42";
+                }
+                for (i = 0; i < lables.length; i++) {
+                    lables[i].style.color = "#232D42";
                 }
 
                 sideMenu.style.backgroundColor = "#FFFFFF";

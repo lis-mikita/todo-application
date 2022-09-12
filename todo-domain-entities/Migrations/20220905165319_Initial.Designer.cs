@@ -47,12 +47,12 @@ namespace todo_domain_entities.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int?>("ToDoListId")
+                    b.Property<int?>("TodoListId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ToDoListId");
+                    b.HasIndex("TodoListId");
 
                     b.ToTable("TodoItems");
                 });
@@ -111,7 +111,7 @@ namespace todo_domain_entities.Migrations
                 {
                     b.HasOne("todo_domain_entities.Entities.TodoList", "TodoList")
                         .WithMany("TodoItems")
-                        .HasForeignKey("ToDoListId");
+                        .HasForeignKey("TodoListId");
                 });
 
             modelBuilder.Entity("todo_domain_entities.Entities.TodoList", b =>

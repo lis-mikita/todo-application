@@ -1,38 +1,40 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using todo_aspnetmvc_ui.Contexts;
 using todo_aspnetmvc_ui.Models;
 using todo_aspnetmvc_ui.ViewModels;
-using todo_domain_entities;
-using todo_domain_entities.Entities;
 using todo_domain_entities.EntitiesBL;
+using todo_domain_entities.Interfaces;
 
 namespace todo_aspnetmvc_ui.Controllers
 {
+    /// <summary>
+    /// Provides display of list page.
+    /// </summary>
     [Authorize]
     public class HomeController : Controller
     {
+        private readonly IBL _db;
+
         private Mapper MapperList { get; }
 
         private Mapper MapperItem { get; }
 
         private Mapper MapperUser { get; }
 
-        public HomeController()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HomeController"/> class.
+        /// </summary>
+        /// <param name="bl">Session with database.</param>
+        public HomeController(IBL bl)
         {
+            _db = bl;
+
             var configList = new MapperConfiguration(cfg =>
                 cfg.CreateMap<TodoListBL, TodoListModel>().ReverseMap());
             MapperList = new Mapper(configList);
@@ -46,75 +48,87 @@ namespace todo_aspnetmvc_ui.Controllers
             MapperUser = new Mapper(configUser);
         }
 
+        /// <summary>
+        /// Display list page.
+        /// </summary>
+        /// <param name="id">Number of TodoList.</param>
+        /// <returns>Index view page.</returns>
         [Route("/{id?}")]
         public IActionResult Index(int id = 0)
         {
-            using (var db = new BL())
+            var user = MapperUser.Map<UserModel>(_db.GetUsers()
+                .FirstOrDefault(x => x.Email == User.Identity.Name));
+
+            // Find - Does have user at least list?
+            var firstList = _db.GetTodoLists().FirstOrDefault(x => x.UserId == user.Id);
+
+            if (firstList == null)
             {
-                var user = MapperUser.Map<UserModel>(db.GetUsers()
-                    .FirstOrDefault(x => x.Email == User.Identity.Name));
-
-                var firstList = db.GetTodoLists().FirstOrDefault(x => x.UserId == user.Id);
-
-                if (firstList == null)
-                {
-                    // Not action
-                }
-                else
-                {
-                    if (id == 0)
-                    {
-                        id = firstList.Id;
-                    }
-                }
-
-                var userIndex = new UserIndexModel()
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Email = user.Email,
-                    Mode = user.Mode
-                };
-
-                IndexViewModel model = new IndexViewModel()
-                {
-                    TodoLists = MapperList.Map<List<TodoListModel>>(db.GetTodoLists()
-                    .Where(x => x.UserId == user.Id)),
-                    User = userIndex
-                };
-
-                var items = MapperItem.Map<List<TodoItemModel>>(db.GetTodoItems());
-
-                IEnumerable<TodoItemModel> m = null;
-                if (firstList != null)
-                {
-                    m = items.Where(x => x.ToDoListId == model.TodoLists.FirstOrDefault(x => x.Id == id).Id);
-                }
-
-                model.TodoItems = m;
-
-                IEnumerable<TodoListModel> notificationList = new List<TodoListModel>();
-                foreach (var item in model.TodoLists ?? Enumerable.Empty<TodoListModel>())
-                {
-                    if (items.FirstOrDefault(x => x.ToDoListId == item.Id && x.DuetoDateTime.Date == DateTime.Today) != null)
-                    {
-                        notificationList = notificationList.Append(item);
-                    }
-                }
-
-                model.Notifications = notificationList;
-
-                ViewBag.Id = id;
-
-                if (new TypeBrowser(HttpContext).IsMobileDeviceBrowser())
-                {
-                    return View("Index.Mobile", model);
-                }
-
-                return View(model);
+                // Not action
             }
+            else
+            {
+                if (id == 0)
+                {
+                    id = firstList.Id;
+                }
+            }
+
+            var userIndex = new UserIndexModel
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Mode = user.Mode,
+            };
+
+            var todoLists = MapperList.Map<List<TodoListModel>>(_db.GetTodoLists()
+                .Where(x => x.UserId == user.Id));
+
+            // Take items list
+            var items = MapperItem.Map<List<TodoItemModel>>(_db.GetTodoItems());
+            IEnumerable<TodoItemModel> listItems = null;
+            if (firstList != null)
+            {
+                listItems = items.Where(x => x.ToDoListId == todoLists.FirstOrDefault(x => x.Id == id).Id);
+            }
+
+            // Take notifications
+            var notificationList = new List<TodoListModel>();
+            foreach (var item in todoLists ?? Enumerable.Empty<TodoListModel>())
+            {
+                if (items.FirstOrDefault(x => x.ToDoListId == item.Id && x.DuetoDateTime.Date == DateTime.Today) != null)
+                {
+                    notificationList.Add(item);
+                }
+            }
+
+            IndexViewModel model = new IndexViewModel
+            {
+                TodoLists = todoLists,
+                User = userIndex,
+                TodoItems = listItems,
+                Notifications = notificationList,
+            };
+
+            ViewBag.Id = id;
+
+            if (new TypeBrowser(HttpContext).IsMobileDeviceBrowser())
+            {
+                return View("Index.Mobile", model);
+            }
+
+            return View(model);
         }
 
+        /// <summary>
+        /// Display list page with filter item.
+        /// </summary>
+        /// <param name="id">List number.</param>
+        /// <param name="sortBy">Sorting.</param>
+        /// <param name="groupBy">Grouping.</param>
+        /// <param name="filterBy">Filtering.</param>
+        /// <returns>Index view page with filters.</returns>
         public IActionResult Filter(int id, string sortBy, string groupBy, string filterBy)
         {
             if (string.IsNullOrEmpty(sortBy)
@@ -124,323 +138,326 @@ namespace todo_aspnetmvc_ui.Controllers
                 return Redirect($"/{id}");
             }
 
-            using (var db = new BL())
+            // Take items for filter
+            var todoItems = MapperItem.Map<List<TodoItemModel>>(_db.GetTodoItems())
+                .Where(x => x.ToDoListId == id);
+
+            todoItems = sortBy switch
             {
-                var todoItems = MapperItem.Map<List<TodoItemModel>>(db.GetTodoItems())
-                    .Where(x => x.ToDoListId == id);
+                "title" => todoItems.OrderBy(x => x.Title),
+                "description" => todoItems.OrderBy(x => x.Description),
+                "duedate" => todoItems.OrderBy(x => x.DuetoDateTime),
+                "createdate" => todoItems.OrderBy(x => x.CreatedDate),
+                "status" => todoItems.OrderBy(x => x.Status),
+                _ => todoItems.OrderBy(x => x.Id),
+            };
 
-                switch (sortBy)
+            // Add switch for groupBy
+
+            todoItems = filterBy switch
+            {
+                "completed" => todoItems.Where(x => x.Status == Models.TodoItemStatus.Completed),
+                "inProgress" => todoItems.Where(x => x.Status == Models.TodoItemStatus.InProgress),
+                "notStarted" => todoItems.Where(x => x.Status == Models.TodoItemStatus.NotStarted),
+                _ => todoItems.Select(x => x),
+            };
+
+            // Take user
+            var user = MapperUser.Map<UserModel>(_db.GetUsers()
+                .FirstOrDefault(x => x.Email == User.Identity.Name));
+
+            var userIndex = new UserIndexModel
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Mode = user.Mode,
+            };
+
+            // Take lists
+            var todoLists = MapperList.Map<List<TodoListModel>>(_db.GetTodoLists()
+                    .Where(x => x.UserId == user.Id));
+
+            var items = MapperItem.Map<List<TodoItemModel>>(_db.GetTodoItems());
+            var notificationList = new List<TodoListModel>();
+            foreach (var item in todoLists ?? Enumerable.Empty<TodoListModel>())
+            {
+                if (items.FirstOrDefault(x => x.ToDoListId == item.Id && x.DuetoDateTime.Date == DateTime.Today) != null)
                 {
-                    case "title":
-                        todoItems = todoItems.OrderBy(x => x.Title);
-                        break;
-                    case "description":
-                        todoItems = todoItems.OrderBy(x => x.Description);
-                        break;
-                    case "duedate":
-                        todoItems = todoItems.OrderBy(x => x.DuetoDateTime);
-                        break;
-                    case "createdate":
-                        todoItems = todoItems.OrderBy(x => x.CreatedDate);
-                        break;
-                    case "status":
-                        todoItems = todoItems.OrderBy(x => x.Status);
-                        break;
-                    default:
-                        todoItems = todoItems.OrderBy(x => x.Id);
-                        break;
+                    notificationList.Add(item);
                 }
-
-                switch (groupBy)
-                {
-                    default:
-                        break;
-                }
-
-                switch (filterBy)
-                {
-                    case "completed":
-                        todoItems = todoItems.Where(x => x.Status == Models.TodoItemStatus.Completed);
-                        break;
-                    case "inProgress":
-                        todoItems = todoItems.Where(x => x.Status == Models.TodoItemStatus.InProgress);
-                        break;
-                    case "notStarted":
-                        todoItems = todoItems.Where(x => x.Status == Models.TodoItemStatus.NotStarted);
-                        break;
-                    default:
-                        break;
-                }
-
-                var user = MapperUser.Map<UserModel>(db.GetUsers()
-                    .FirstOrDefault(x => x.Email == User.Identity.Name));
-
-                var userIndex = new UserIndexModel()
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Email = user.Email,
-                    Mode = user.Mode
-                };
-
-                IndexViewModel ivm = new IndexViewModel()
-                {
-                    TodoLists = MapperList.Map<List<TodoListModel>>(db.GetTodoLists()
-                        .Where(x => x.UserId == user.Id)),
-                    TodoItems = todoItems,
-                    User = userIndex
-                };
-
-                var items = MapperItem.Map<List<TodoItemModel>>(db.GetTodoItems());
-                IEnumerable<TodoListModel> notificationList = new List<TodoListModel>();
-                foreach (var item in ivm.TodoLists ?? Enumerable.Empty<TodoListModel>())
-                {
-                    if (items.FirstOrDefault(x => x.ToDoListId == item.Id && x.DuetoDateTime.Date == DateTime.Today) != null)
-                    {
-                        notificationList = notificationList.Append(item);
-                    }
-                }
-
-                ivm.Notifications = notificationList;
-
-                ViewBag.Id = id;
-                ViewBag.Sort = sortBy;
-                ViewBag.Group = groupBy;
-                ViewBag.Filter = filterBy;
-
-                if (new TypeBrowser(HttpContext).IsMobileDeviceBrowser())
-                {
-                    return View("Index.Mobile", ivm);
-                }
-
-                return View("Index", ivm);
             }
+
+            IndexViewModel ivm = new IndexViewModel
+            {
+                TodoLists = todoLists,
+                TodoItems = todoItems,
+                User = userIndex,
+                Notifications = notificationList,
+            };
+
+            ViewBag.Id = id;
+            ViewBag.Sort = sortBy;
+            ViewBag.Group = groupBy;
+            ViewBag.Filter = filterBy;
+
+            if (new TypeBrowser(HttpContext).IsMobileDeviceBrowser())
+            {
+                return View("Index.Mobile", ivm);
+            }
+
+            return View("Index", ivm);
         }
 
+        /// <summary>
+        /// Update TodoList.
+        /// </summary>
+        /// <param name="id">List number.</param>
+        /// <param name="title">New list title.</param>
+        /// <param name="description">New list description.</param>
         public void ChangeList(int id, string title, string description)
         {
-            using (var db = new BL())
+            var todoList = MapperList.Map<TodoListModel>(_db.FindTodoList(id));
+
+            if (title != todoList.Title && title != null)
             {
-                var todoList = MapperList.Map<TodoListModel>(db.FindTodoList(id));
-
-                if (title != todoList.Title && title != null)
-                {
-                    todoList.Title = title;
-                }
-                else if (description != todoList.Description && description != null)
-                {
-                    todoList.Description = description;
-                }
-
-                db.UpdateTodoList(MapperList.Map<TodoListBL>(todoList));
+                todoList.Title = title;
             }
+            else if (description != todoList.Description && description != null)
+            {
+                todoList.Description = description;
+            }
+            else
+            {
+                // Not use
+            }
+
+            _db.UpdateTodoList(MapperList.Map<TodoListBL>(todoList));
         }
 
+        /// <summary>
+        /// Update TodoItem.
+        /// </summary>
+        /// <param name="id">Item number.</param>
+        /// <param name="title">New item title.</param>
+        /// <param name="description">New item description.</param>
+        /// <param name="datetime">New item due to date.</param>
+        /// <param name="status">New item status.</param>
         public void ChangeItem(int id, string title, string description, DateTime datetime, todo_aspnetmvc_ui.Models.TodoItemStatus status)
         {
-            using (var db = new BL())
+            var todoItem = MapperItem.Map<TodoItemModel>(_db.FindTodoItem(id));
+
+            if (title != todoItem.Title && title != null)
             {
-                var todoItem = MapperItem.Map<TodoItemModel>(db.FindTodoItem(id));
-
-                if (title != todoItem.Title && title != null)
-                {
-                    todoItem.Title = title;
-                }
-                else if (description != todoItem.Description && description != null)
-                {
-                    todoItem.Description = description;
-                }
-                else if (datetime != todoItem.DuetoDateTime)
-                {
-                    todoItem.DuetoDateTime = datetime;
-                }
-                else if (status != todoItem.Status)
-                {
-                    todoItem.Status = status;
-                }
-
-                db.UpdateTodoItem(MapperItem.Map<TodoItemBL>(todoItem));
+                todoItem.Title = title;
             }
+            else if (description != todoItem.Description && description != null)
+            {
+                todoItem.Description = description;
+            }
+            else if (datetime != todoItem.DuetoDateTime)
+            {
+                todoItem.DuetoDateTime = datetime;
+            }
+            else if (status != todoItem.Status)
+            {
+                todoItem.Status = status;
+            }
+            else
+            {
+                // Not use
+            }
+
+            _db.UpdateTodoItem(MapperItem.Map<TodoItemBL>(todoItem));
         }
 
+        /// <summary>
+        /// Update hidden status of TodoList.
+        /// </summary>
+        /// <param name="id">List number.</param>
         public void HiddenList(int id)
         {
-            using (var db = new BL())
-            {
-                var todoList = db.FindTodoList(id);
-                
-                if (todoList.IsHidden)
-                {
-                    todoList.IsHidden = false;
-                }
-                else
-                {
-                    todoList.IsHidden = true;
-                }
+            var todoList = _db.FindTodoList(id);
 
-                db.UpdateTodoList(MapperList.Map<TodoListBL>(todoList));
-            }
+            todoList.IsHidden = !todoList.IsHidden;
+
+            _db.UpdateTodoList(MapperList.Map<TodoListBL>(todoList));
         }
 
+        /// <summary>
+        /// Change start mode user light/dark.
+        /// </summary>
         public void ModeChange()
         {
-            using (var db = new BL())
-            {
-                int user_id = db.GetUsers()
-                    .FirstOrDefault(x => x.Email == User.Identity.Name).Id;
-                var user = db.FindUser(user_id);
+            int user_id = _db.GetUsers()
+                .FirstOrDefault(x => x.Email == User.Identity.Name).Id;
+            var user = _db.FindUser(user_id);
 
-                if (user.Mode)
-                {
-                    user.Mode = false;
-                }
-                else
-                {
-                    user.Mode = true;
-                }
+            user.Mode = !user.Mode;
 
-                db.UpdateUser(MapperList.Map<UserBL>(user));
-            }
+            _db.UpdateUser(MapperList.Map<UserBL>(user));
         }
 
+        /// <summary>
+        /// Add TodoList in set.
+        /// </summary>
+        /// <returns>Index page with added list.</returns>
         [HttpPost]
         public IActionResult AddList()
         {
-            using (var db = new BL())
+            var user = MapperUser.Map<UserModel>(_db.GetUsers()
+                .FirstOrDefault(x => x.Email == User.Identity.Name));
+
+            int number = _db.GetTodoLists()
+                .Where(x => x.UserId == user.Id)
+                .Count(x => x.Title.Contains("Template", StringComparison.OrdinalIgnoreCase));
+            number++;
+
+            var todoList = new TodoListModel
             {
-                var user = MapperUser.Map<UserModel>(db.GetUsers()
+                Title = $"Template{number}",
+                Description = $"About todolist \"Template{number}\".",
+                IsHidden = false,
+                UserId = user.Id,
+            };
+
+            _db.AddTodoList(MapperList.Map<TodoListBL>(todoList));
+
+            int id = _db.GetTodoLists()
+                .Last(x => x.UserId == user.Id).Id;
+
+            return Redirect($"/{id}");
+        }
+
+        /// <summary>
+        /// Add TodoItem in set.
+        /// </summary>
+        /// <param name="id">Item number.</param>
+        /// <returns>Index page with added item.</returns>
+        [HttpPost]
+        public IActionResult AddItem(int id)
+        {
+            int number = 0;
+
+            // Check - Does have user at least list?
+            if (id != 0)
+            {
+                number = _db.GetTodoItems()
+                    .Where(x => x.ToDoListId == id)
+                    .Count(x => x.Title.Contains("Template", StringComparison.OrdinalIgnoreCase));
+                number++;
+            }
+            else
+            {
+                var user = MapperUser.Map<UserModel>(_db.GetUsers()
                     .FirstOrDefault(x => x.Email == User.Identity.Name));
 
-                int number = db.GetTodoLists()
-                    .Where(x => x.UserId == user.Id)
-                    .Count(x => x.Title.Contains("Template"));
-                number++;
-
-                var todoList = new TodoListModel()
+                var todoList = new TodoListModel
                 {
-                    Title = $"Template{number}",
-                    Description = $"About todolist \"Template{number}\".",
+                    Title = $"Template1",
+                    Description = $"About todolist \"Template1\".",
                     IsHidden = false,
                     UserId = user.Id,
                 };
 
-                db.AddTodoList(MapperList.Map<TodoListBL>(todoList));
-                int id = db.GetTodoLists()
+                _db.AddTodoList(MapperList.Map<TodoListBL>(todoList));
+
+                id = _db.GetTodoLists()
                     .Last(x => x.UserId == user.Id).Id;
-
-                return Redirect($"/{id}");
             }
-        }
 
-        [HttpPost]
-        public IActionResult AddItem(int id)
-        {
-            using (var db = new BL())
+            var todoItem = new TodoItemModel
             {
-                int number = 0;
-                if (id != 0)
-                {
-                    number = db.GetTodoItems()
-                        .Where(x => x.ToDoListId == id)
-                        .Count(x => x.Title.Contains("Template"));
-                    number++;
-                }
-                else
-                {
-                    var user = MapperUser.Map<UserModel>(db.GetUsers()
-                   .FirstOrDefault(x => x.Email == User.Identity.Name));
+                Title = $"Template{number}",
+                Description = $"About todoitem \"Template{number}\".",
+                DuetoDateTime = DateTime.Now,
+                CreatedDate = DateTime.Now,
+                Status = Models.TodoItemStatus.NotStarted,
+                ToDoListId = id,
+            };
 
-                    var todoList = new TodoListModel()
-                    {
-                        Title = $"Template1",
-                        Description = $"About todolist \"Template1\".",
-                        IsHidden = false,
-                        UserId = user.Id,
-                    };
+            _db.AddTodoItem(MapperItem.Map<TodoItemBL>(todoItem));
 
-                    db.AddTodoList(MapperList.Map<TodoListBL>(todoList));
-                    id = db.GetTodoLists()
-                        .Last(x => x.UserId == user.Id).Id;
-                }
-
-                var todoItem = new TodoItemModel()
-                {
-                    Title = $"Template{number}",
-                    Description = $"About todoitem \"Template{number}\".",
-                    DuetoDateTime = DateTime.Now,
-                    CreatedDate = DateTime.Now,
-                    Status = Models.TodoItemStatus.NotStarted,
-                    ToDoListId = id
-                };
-
-                db.AddTodoItem(MapperItem.Map<TodoItemBL>(todoItem));
-
-                return Redirect($"/{id}");
-            }
+            return Redirect($"/{id}");
         }
 
+        /// <summary>
+        /// Delete TodoList from set.
+        /// </summary>
+        /// <param name="id">List number.</param>
+        /// <returns>Index page with default list.</returns>
         [Route("/delete/{id}")]
         public IActionResult DeleteList(int id)
         {
-            using (var db = new BL())
-            {
-                db.RemoveTodoList(id);
+            _db.RemoveTodoList(id);
 
-                return Redirect($"/0");
-            }
+            const int ID_DEFAULT_LIST = 0;
+
+            return Redirect($"/{ID_DEFAULT_LIST}");
         }
 
+        /// <summary>
+        /// Delete TodoItem from set.
+        /// </summary>
+        /// <param name="id">Item number.</param>
+        /// <param name="list_id">List number.</param>
+        /// <returns>List without item.</returns>
         [Route("/delete/item/{list_id}/{id}")]
         public IActionResult DeleteItem(int id, int list_id)
         {
-            using (var db = new BL())
-            {
-                db.RemoveTodoItem(id);
+            _db.RemoveTodoItem(id);
 
-                return Redirect($"/{list_id}");
-            }
+            return Redirect($"/{list_id}");
         }
 
+        /// <summary>
+        /// Copy TodoList and create it copy in set.
+        /// </summary>
+        /// <param name="id">List number.</param>
+        /// <returns>Index page with new list.</returns>
         [Route("/copy/{id}")]
         public IActionResult CopyList(int id)
         {
-            using (var db = new BL())
+            var todoListOld = _db.FindTodoList(id);
+
+            int number = _db.GetTodoLists().Count(x => x.Title.Contains(todoListOld.Title, StringComparison.OrdinalIgnoreCase));
+            number++;
+
+            var todoListNew = new TodoListModel
             {
-                var todoListOld = db.FindTodoList(id);
+                Title = $"{todoListOld.Title}{number}",
+                Description = todoListOld.Description,
+                IsHidden = false,
+                UserId = todoListOld.UserId,
+            };
 
-                int number = db.GetTodoLists().Count(x => x.Title.Contains(todoListOld.Title));
-                number++;
+            _db.AddTodoList(MapperList.Map<TodoListBL>(todoListNew));
 
-                var todoListNew = new TodoListModel()
+            int newId = _db.GetTodoLists().Last(x => x.UserId == todoListOld.UserId).Id;
+
+            // Don't work mapper
+            foreach (var item in MapperItem.Map<List<TodoItemModel>>(_db.GetTodoItems().Where(x => x.ToDoListId == id)))
+            {
+                var todoItemNew = new TodoItemModel
                 {
-                    Title = $"{todoListOld.Title}{number}",
-                    Description = todoListOld.Description,
-                    IsHidden = false,
-                    UserId = todoListOld.UserId
+                    Title = item.Title,
+                    Description = item.Description,
+                    DuetoDateTime = item.DuetoDateTime,
+                    Status = item.Status,
+                    ToDoListId = newId,
+                    CreatedDate = item.CreatedDate,
                 };
 
-                db.AddTodoList(MapperList.Map<TodoListBL>(todoListNew));
-                int idNew = db.GetTodoLists().Last(x => x.UserId == todoListOld.UserId).Id;
-
-                foreach (var item in MapperItem.Map<List<TodoItemModel>>(db.GetTodoItems().Where(x => x.ToDoListId == id)))
-                {
-                    var todoItemNew = new TodoItemModel()
-                    {
-                        Title = item.Title,
-                        Description = item.Description,
-                        DuetoDateTime = item.DuetoDateTime,
-                        Status = item.Status,
-                        ToDoListId = idNew,
-                        CreatedDate = item.CreatedDate
-                    };
-
-                    db.AddTodoItem(MapperItem.Map<TodoItemBL>(todoItemNew));
-                }
-
-                return Redirect($"/{idNew}");
+                _db.AddTodoItem(MapperItem.Map<TodoItemBL>(todoItemNew));
             }
+
+            return Redirect($"/{newId}");
         }
 
+        /// <summary>
+        /// Called when an error occurs.
+        /// </summary>
+        /// <returns>Error page.</returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

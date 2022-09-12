@@ -71,7 +71,7 @@ namespace todo_domain_entities.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_TodoItems_ToDoListId",
                 table: "TodoItems",
-                column: "ToDoListId");
+                column: "TodoListId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TodoLists_UserId",

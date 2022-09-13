@@ -44,7 +44,7 @@ namespace todo_domain_entities.EF
                  .SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
                  .AddJsonFile("appsettings.json", optional: false)
                  .Build();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("TodoConnection"));
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("AzureConnection"));
         }
     }
 }

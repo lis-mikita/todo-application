@@ -6,6 +6,10 @@
     height: 100%;
 }
 
+button.dropdown-toggle::after {
+    border: 0px;
+}
+
 .b-0 {
     border: 0px;
 }

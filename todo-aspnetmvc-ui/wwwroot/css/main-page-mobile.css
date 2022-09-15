@@ -10,6 +10,10 @@ button.dropdown-toggle::after {
     border: 0px;
 }
 
+a.dropdown-item {
+    cursor: pointer;
+}
+
 .b-0 {
     border: 0px;
 }

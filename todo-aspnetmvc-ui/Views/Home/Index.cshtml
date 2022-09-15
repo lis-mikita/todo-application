@@ -28,7 +28,7 @@
                             modeNot = "";
                         }
                     }
-                    <span @modeNot class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" style="/* padding-top: 0px; *//* width: 5px; *//* height: 5px; */margin-left: 18px;">
+                    <span @modeNot id="CircleNotification" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" style="/* padding-top: 0px; *//* width: 5px; *//* height: 5px; */margin-left: 18px;">
                     </span>
                     <span class="material-symbols-outlined">
                         notifications
@@ -40,7 +40,7 @@
                             <svg class="bd-placeholder-img rounded me-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#007aff"></rect></svg>
                             <strong class="me-auto">Today's tasks</strong>
                             <small>@DateTime.Now.ToString("t")</small>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" style="border: 0px; padding: 0px; color: gray; background-color: inherit;">
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" onclick="HiddenNotification();" aria-label="Close" style="border: 0px; padding: 0px; color: gray; background-color: inherit;">
                                 <span class="material-symbols-outlined">
                                     close
                                 </span>
@@ -122,13 +122,9 @@
                         <div class="messages-spreadsheets">
                             <div class="item-messages-spreadsheets">
                                 <div class="status-item-messages-spreadsheets">
-                                    <form method="get" class="eye-status-item-messages-spreadsheets">
-                                        <button type="submit" value="Send" asp-controller="Home" asp-action="Index" class="eye-status-item-messages-spreadsheets">
-                                            <span class="material-symbols-outlined eye-status-item-messages-spreadsheets" id="span @item.Id">
-                                                @icon
-                                            </span>
-                                        </button>
-                                    </form>
+                                    <span class="material-symbols-outlined eye-status-item-messages-spreadsheets" id="span @item.Id">
+                                        @icon
+                                    </span>
                                     <a href="/@item.Id" class="nav-link link-dark status-item-messages-spreadsheets">
                                         <label id="todoList @item.Id" style="margin: 0px;" class="c-a">
                                             @item.Title
@@ -656,6 +652,12 @@
 
                 toast.show()
             })
+        }
+    </script>
+    <script>
+        function HiddenNotification(){
+            let circle = document.getElementById('CircleNotification');
+            circle.hidden = true;
         }
     </script>
 }

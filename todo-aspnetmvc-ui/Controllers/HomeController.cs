@@ -97,7 +97,9 @@ namespace todo_aspnetmvc_ui.Controllers
             var notificationList = new List<TodoListModel>();
             foreach (var item in todoLists ?? Enumerable.Empty<TodoListModel>())
             {
-                if (items.FirstOrDefault(x => x.ToDoListId == item.Id && x.DuetoDateTime.Date == DateTime.Today) != null)
+                if (items.FirstOrDefault(x => x.ToDoListId == item.Id 
+                    && x.DuetoDateTime.Date == DateTime.Today
+                    && x.Status != Models.TodoItemStatus.Completed) != null)
                 {
                     notificationList.Add(item);
                 }
@@ -182,7 +184,9 @@ namespace todo_aspnetmvc_ui.Controllers
             var notificationList = new List<TodoListModel>();
             foreach (var item in todoLists ?? Enumerable.Empty<TodoListModel>())
             {
-                if (items.FirstOrDefault(x => x.ToDoListId == item.Id && x.DuetoDateTime.Date == DateTime.Today) != null)
+                if (items.FirstOrDefault(x => x.ToDoListId == item.Id
+                    && x.DuetoDateTime.Date == DateTime.Today
+                    && x.Status != Models.TodoItemStatus.Completed) != null)
                 {
                     notificationList.Add(item);
                 }
